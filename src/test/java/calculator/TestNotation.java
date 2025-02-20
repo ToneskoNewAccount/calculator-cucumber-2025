@@ -2,6 +2,7 @@ package calculator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -56,4 +57,38 @@ class TestNotation {
 		testNotations(symbol, value1, value2, op);
 	}
 
+	@Test
+	void testComplexNotations() {
+		Operation o = null;
+		try {
+			List<Expression> params1 = Arrays.asList(new MyNumber(3), new MyNumber(4), new MyNumber(5));
+			List<Expression> params2 = Arrays.asList(new MyNumber(5), new MyNumber(4));
+			List<Expression> params3 = Arrays.asList(new Plus(params1), new Minus(params2), new MyNumber(7));
+			o = new Divides(params3);
+		} catch (IllegalConstruction e) {
+			fail();
+		}
+
+		// Use printer to test the output of the complex expression
+		String s = "( ( 3.0 + 4.0 + 5.0 ) / ( 5.0 - 4.0 ) / 7.0 )";
+		Notation n = Notation.INFIX;
+
+		Printer p = new Printer(n);
+		o.accept(p);
+		assertEquals(s, p.getResult());
+
+		// Same but with postfix notation
+		s = "((3.0, 4.0, 5.0) +, (5.0, 4.0) -, 7.0) /";
+		n = Notation.POSTFIX;
+		p.setNotation(n);
+		o.accept(p);
+		assertEquals(s, p.getResult());
+
+		// Same but with prefix notation
+		s = "/ (+ (3.0, 4.0, 5.0), - (5.0, 4.0), 7.0)";
+		n = Notation.PREFIX;
+		p.setNotation(n);
+		o.accept(p);
+		assertEquals(s, p.getResult());
+	}
 }

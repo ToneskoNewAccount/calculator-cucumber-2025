@@ -124,3 +124,19 @@ Feature: Double Arithmetic Expressions
       | -         | 5            | 6            | - (5.0, 6.0)        | (5.0, 6.0) -        | ( 5.0 - 6.0 )     |
       | *         | 5            | 6            | * (5.0, 6.0)        | (5.0, 6.0) *        | ( 5.0 * 6.0 )     |
       | /         | 5            | 6            | / (5.0, 6.0)        | (5.0, 6.0) /        | ( 5.0 / 6.0 )     |
+
+  Scenario Outline: Testing notations with three double numbers
+    Given an double operation '<operation>'
+    When I provide a first number <first_number>
+    When I provide a second number <second_number>
+    When I provide a third number <third_number>
+    Then its PREFIX notation is <prefix_notation>
+    And its POSTFIX notation is <postfix_notation>
+    And its INFIX notation is <infix_notation>
+
+    Examples:
+      | operation | first_number | second_number | third_number | prefix_notation | postfix_notation | infix_notation |
+      | +         | 5            | 6             | 7            | + (5.0, 6.0, 7.0) | (5.0, 6.0, 7.0) + | ( 5.0 + 6.0 + 7.0 ) |
+      | -         | 5            | 6             | 7            | - (5.0, 6.0, 7.0) | (5.0, 6.0, 7.0) - | ( 5.0 - 6.0 - 7.0 ) |
+      | *         | 5            | 6             | 7            | * (5.0, 6.0, 7.0) | (5.0, 6.0, 7.0) * | ( 5.0 * 6.0 * 7.0 ) |
+      | /         | 5            | 6             | 7            | / (5.0, 6.0, 7.0) | (5.0, 6.0, 7.0) / | ( 5.0 / 6.0 / 7.0 ) |

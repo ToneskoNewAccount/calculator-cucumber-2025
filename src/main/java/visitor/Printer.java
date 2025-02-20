@@ -13,12 +13,12 @@ public class Printer extends Visitor {
     /** The result of the printer will be stored in this private variable */
     private String computedResult;
 
-    /** The notation to print the expression in */
+    /** The notation to convert the expression in */
     private Notation notation;
 
     /** Creates a {@code Printer} with the specified notation.
      *
-     * @param notation the {@link Notation} that determines the notation to print the expression in
+     * @param notation the {@link Notation} that determines the notation to convert the expression in
      */
     public Printer(Notation notation) {
         this.notation = notation;
@@ -29,6 +29,14 @@ public class Printer extends Visitor {
      * @return a String object containing the result of the printer
      */
     public String getResult() { return computedResult; }
+
+    /** setter method to set the notation of the printer.
+     *
+     * @param notation the {@link Notation} that determines the notation to convert the expression in
+     */
+    public void setNotation(Notation notation) {
+        this.notation = notation;
+    }
 
     /** Use the visitor design pattern to visit a number.
      *
