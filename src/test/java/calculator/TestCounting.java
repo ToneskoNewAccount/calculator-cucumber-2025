@@ -16,12 +16,16 @@ import java.util.List;
 
 
 class TestCounting {
-
+    private Operation o;
     private int value1, value2;
     private Expression e;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+        List<Expression> params1 = Arrays.asList(new MyNumber(3), new MyNumber(4), new MyNumber(5));
+        List<Expression> params2 = Arrays.asList(new MyNumber(5), new MyNumber(4));
+        List<Expression> params3 = Arrays.asList(new Plus(params1), new Minus(params2), new MyNumber(7));
+        o = new Divides(params3);
         value1 = 8;
         value2 = 6;
         e = null;
@@ -32,7 +36,7 @@ class TestCounting {
         e = new MyNumber(value1);
 
         //test whether a number has zero depth (i.e. no nested expressions)
-	Counter counter = new Counter(CounterMode.DEPTH);
+	    Counter counter = new Counter(CounterMode.DEPTH);
         e.accept(counter);
         assertEquals(0, counter.getResult());
 
@@ -51,7 +55,7 @@ class TestCounting {
     @ValueSource(strings = {"*", "+", "/", "-"})
     void testOperationCounting(String symbol) {
         List<Expression> params = Arrays.asList(new MyNumber(value1),new MyNumber(value2));
-        //Operation op = null;
+
         try {
             //construct another type of operation depending on the input value
             //of the parameterised test
@@ -66,7 +70,7 @@ class TestCounting {
             fail();
         }
         //test whether a binary operation has depth 1
-	Counter counter = new Counter(CounterMode.DEPTH);
+	    Counter counter = new Counter(CounterMode.DEPTH);
         e.accept(counter);
         assertEquals(1, counter.getResult(),"counting depth of an Operation");
 
@@ -79,6 +83,30 @@ class TestCounting {
         counter.setMode(CounterMode.NUMBERS);
         e.accept(counter);
         assertEquals(2, counter.getResult());
+    }
+
+    @Test
+    void testCountDepth() {
+        Counter counter = new Counter(CounterMode.DEPTH);
+        o.accept(counter);
+
+        assertEquals(2, counter.getResult());
+    }
+
+    @Test
+    void testCountOps() {
+        Counter counter = new Counter(CounterMode.OPERATIONS);
+        o.accept(counter);
+
+        assertEquals(3, counter.getResult());
+    }
+
+    @Test
+    void testCountNbs() {
+        Counter counter = new Counter(CounterMode.NUMBERS);
+        o.accept(counter);
+
+        assertEquals(6, counter.getResult());
     }
 
 }
