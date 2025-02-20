@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 class TestMyNumber {
 
-	private final int value =8;
+	private final double value =8;
 	private MyNumber number;
 	
 	@BeforeEach
@@ -33,7 +33,7 @@ class TestMyNumber {
 
 	@Test
 	void testToString() {
-		assertEquals(Integer.toString(value), number.toString());
+		assertEquals(Double.toString(value), number.toString());
 	}
 
 }

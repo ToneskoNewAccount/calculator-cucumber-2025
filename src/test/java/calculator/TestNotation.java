@@ -23,7 +23,7 @@ class TestNotation {
 
 	/* This is an auxilary method to avoid code duplication.
      */
-	void testNotations(String symbol,int value1,int value2,Operation op) {
+	void testNotations(String symbol,double value1,double value2,Operation op) {
 		//prefix notation:
 		testNotation(symbol +" (" + value1 + ", " + value2 + ")", op, Notation.PREFIX);
 		//infix notation:
@@ -35,8 +35,8 @@ class TestNotation {
 	@ParameterizedTest
 	@ValueSource(strings = {"*", "+", "/", "-"})
 	void testOutput(String symbol) {
-		int value1 = 8;
-		int value2 = 6;
+		double value1 = 8;
+		double value2 = 6;
 		Operation op = null;
 		//List<Expression> params = new ArrayList<>(Arrays.asList(new MyNumber(value1),new MyNumber(value2)));
 		List<Expression> params = Arrays.asList(new MyNumber(value1),new MyNumber(value2));

@@ -35,7 +35,7 @@ public class Printer extends Visitor {
      * @param n The number being visited
      */
     public void visit(MyNumber n) {
-        computedResult = Integer.toString(n.getValue());
+        computedResult = Double.toString(n.getValue());
     }
 
     /** 

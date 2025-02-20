@@ -12,7 +12,7 @@ import java.util.List;
 class TestEvaluator {
 
     private Calculator calc;
-    private int value1, value2;
+    private double value1, value2;
 
     @BeforeEach
     void setUp() {

@@ -25,12 +25,12 @@ public final class Plus extends Operation
   }
 
   /**
-   * The actual computation of the (binary) arithmetic addition of two integers
-   * @param l The first integer
-   * @param r The second integer that should be added to the first
-   * @return The integer that is the result of the addition
+   * The actual computation of the (binary) arithmetic addition of two doubles
+   * @param l The first double
+   * @param r The second double that should be added to the first
+   * @return The double that is the result of the addition
    */
-  public int op(int l, int r) {
+  public double op(double l, double r) {
   	return (l+r);
   }
 }

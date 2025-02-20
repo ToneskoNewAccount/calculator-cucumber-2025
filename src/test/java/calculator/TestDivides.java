@@ -75,4 +75,28 @@ class TestDivides {
 		assertThrows(IllegalConstruction.class, () -> op = new Divides(params));
 	}
 
+    @Test
+    void testDivisionByZero() {
+		// We test that is does not throw an exception.
+        assertDoesNotThrow(() -> op.op(5.0, 0.0));
+    }
+
+    @Test
+    void testDivisionByZeroReturnsNaN() {
+        double result = op.op(5.0, 0.0);
+        assertTrue(Double.isNaN(result), "Result should be NaN when dividing by zero.");
+    }
+
+    @Test
+    void testNegativeDivisionByZeroReturnsNaN() {
+        double result = op.op(-5.0, 0.0);
+        assertTrue(Double.isNaN(result), "Negative number divided by zero should return NaN.");
+    }
+
+    @Test
+    void testZeroDividedByZeroReturnsNaN() {
+        double result = op.op(0.0, 0.0);
+        assertTrue(Double.isNaN(result), "Zero divided by zero should return NaN.");
+    }
 }
+
