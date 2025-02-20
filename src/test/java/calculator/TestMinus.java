@@ -44,7 +44,7 @@ class TestMinus {
 		// Two similar expressions, constructed separately (and using different constructors) should not be equal
 		List<Expression> p = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
 		try {
-			Minus e = new Minus(p, Notation.INFIX);
+			Minus e = new Minus(p);
 			assertEquals(op, e);
 		}
 		catch(IllegalConstruction e) { fail(); }
@@ -61,7 +61,7 @@ class TestMinus {
 		// Two similar expressions, constructed separately (and using different constructors) should have the same hashcode
 		List<Expression> p = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
 		try {
-			Minus e = new Minus(p, Notation.INFIX);
+			Minus e = new Minus(p);
 			assertEquals(e.hashCode(), op.hashCode());
 		}
 		catch(IllegalConstruction e) { fail(); }

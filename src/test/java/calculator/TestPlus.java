@@ -44,10 +44,10 @@ class TestPlus {
 		// Two similar expressions, constructed separately (and using different constructors) should be equal
 		ArrayList<Expression> p = new ArrayList<>(Arrays.asList(new MyNumber(value1), new MyNumber(value2)));
 		try {
-			Plus e = new Plus(p, Notation.INFIX);
+			Plus e = new Plus(p);
 			assertEquals(op, e);
 			assertEquals(e, e);
-			assertNotEquals(e, new Plus(new ArrayList<>(Arrays.asList(new MyNumber(5), new MyNumber(4))), Notation.INFIX));
+			assertNotEquals(e, new Plus(new ArrayList<>(Arrays.asList(new MyNumber(5), new MyNumber(4)))));
 		}
 		catch(IllegalConstruction e) { fail(); }
 	}
@@ -63,7 +63,7 @@ class TestPlus {
 		// Two similar expressions, constructed separately (and using different constructors) should have the same hashcode
 		ArrayList<Expression> p = new ArrayList<>(Arrays.asList(new MyNumber(value1), new MyNumber(value2)));
 		try {
-			Plus e = new Plus(p, Notation.INFIX);
+			Plus e = new Plus(p);
 			assertEquals(e.hashCode(), op.hashCode());
 		}
 		catch(IllegalConstruction e) { fail(); }

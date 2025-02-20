@@ -1,6 +1,9 @@
 package calculator;
 
 import visitor.Evaluator;
+import visitor.Printer;
+import visitor.Counter;
+import visitor.Counter.CounterMode;
 
 /**
  * This class represents the core logic of a Calculator.
@@ -26,26 +29,58 @@ public class Calculator {
     */
 
     /**
-     * Prints an arithmetic expression provided as input parameter.
+     * Prints an arithmetic expression provided as input parameter with the infix notation.
      * @param e the arithmetic Expression to be printed
+     * @see #print(Expression, Notation)
      * @see #printExpressionDetails(Expression) 
      */
     public void print(Expression e) {
-        System.out.println("The result of evaluating expression " + e);
+        print(e, Notation.INFIX);
+    }
+
+    /**
+     * Prints an arithmetic expression provided as input parameter with a specific notation.
+     * @param e the arithmetic Expression to be printed
+     * @see #print(Expression)
+     * @see #printExpressionDetails(Expression) 
+     */
+    public void print(Expression e, Notation n) {
+        Printer p = new Printer(n);
+        e.accept(p);
+        System.out.println("The result of evaluating expression " + p.getResult());
         System.out.println("is: " + eval(e) + ".");
         System.out.println();
     }
 
     /**
-     * Prints verbose details of an arithmetic expression provided as input parameter.
+     * Prints verbose details of an arithmetic expression provided as input parameter with the infix notation.
      * @param e the arithmetic Expression to be printed
-     * @see #print(Expression)
+     * @see #printExpressionDetails(Expression, Notation)
      */
     public void printExpressionDetails(Expression e) {
-        print(e);
-        System.out.print("It contains " + e.countDepth() + " levels of nested expressions, ");
-        System.out.print(e.countOps() + " operations");
-        System.out.println(" and " + e.countNbs() + " numbers.");
+        printExpressionDetails(e, Notation.INFIX);
+    }
+
+    /**
+     * Prints verbose details of an arithmetic expression provided as input parameter with a specific notation.
+     * @param e the arithmetic Expression to be printed
+     * @see #print(Expression, Notation)
+     */
+    public void printExpressionDetails(Expression e, Notation n) {
+        print(e, n);
+
+        Counter c = new Counter(CounterMode.DEPTH);
+        e.accept(c);
+        System.out.print("It contains " + c.getResult() + " levels of nested expressions, ");
+
+        c.setMode(CounterMode.OPERATIONS);
+        e.accept(c);
+        System.out.print(c.getResult() + " operations");
+
+        c.setMode(CounterMode.NUMBERS);
+        e.accept(c);
+        System.out.println(" and " + c.getResult() + " numbers.");
+
         System.out.println();
     }
 
