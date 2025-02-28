@@ -16,6 +16,7 @@ updates:
       prefix: "maven"
     # Allow up to 10 open pull requests for maven dependencies (default is 5)
     open-pull-requests-limit: 10
+    target-branch: "dev"
 
       
   # Maintain dependencies for GitHub Actions
@@ -26,3 +27,4 @@ updates:
       interval: "weekly"
     # Allow up to 10 open pull requests for GHA dependencies (default is 5)
     open-pull-requests-limit: 10
+    target-branch: "dev"
