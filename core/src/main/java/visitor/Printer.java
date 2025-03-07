@@ -10,13 +10,18 @@ import calculator.Operation;
  */
 public class Printer extends Visitor {
 
-    /** The result of the printer will be stored in this private variable */
+    /**
+     * The result of the printer will be stored in this private variable
+     */
     private String computedResult;
 
-    /** The notation to convert the expression in */
+    /**
+     * The notation to convert the expression in
+     */
     private Notation notation;
 
-    /** Creates a {@code Printer} with the specified notation.
+    /**
+     * Creates a {@code Printer} with the specified notation.
      *
      * @param notation the {@link Notation} that determines the notation to convert the expression in
      */
@@ -24,13 +29,17 @@ public class Printer extends Visitor {
         this.notation = notation;
     }
 
-    /** getter method to obtain the result of the printer.
+    /**
+     * getter method to obtain the result of the printer.
      *
      * @return a String object containing the result of the printer
      */
-    public String getResult() { return computedResult; }
+    public String getResult() {
+        return computedResult;
+    }
 
-    /** setter method to set the notation of the printer.
+    /**
+     * setter method to set the notation of the printer.
      *
      * @param notation the {@link Notation} that determines the notation to convert the expression in
      */
@@ -38,7 +47,8 @@ public class Printer extends Visitor {
         this.notation = notation;
     }
 
-    /** Use the visitor design pattern to visit a number.
+    /**
+     * Use the visitor design pattern to visit a number.
      *
      * @param n The number being visited
      */
@@ -46,9 +56,9 @@ public class Printer extends Visitor {
         computedResult = Double.toString(n.getValue());
     }
 
-    /** 
+    /**
      * Use the visitor design pattern to visit an operation.
-     * 
+     *
      * @param o The operation being visited.
      */
     public void visit(Operation o) {
@@ -67,37 +77,43 @@ public class Printer extends Visitor {
         computedResult = result;
     }
 
-    /** 
+    /**
      * Get the start of the notation of an operation.
-     * 
+     *
      * @param o The operation being visited.
      * @return The start notation of the operation.
      */
     private String getStartNotation(Operation o) {
         switch (notation) {
-            case PREFIX: return o.toString() + " (";
-            case INFIX: return "( ";
-            default: return "(";
+            case PREFIX:
+                return o.toString() + " (";
+            case INFIX:
+                return "( ";
+            default:
+                return "(";
         }
     }
 
-    /** 
+    /**
      * Get the end of the notation of an operation.
-     * 
+     *
      * @param o The operation being visited.
      * @return The end notation of the operation.
      */
     private String getEndNotation(Operation o) {
         switch (notation) {
-            case PREFIX: return ")";
-            case INFIX: return " )";
-            default: return ") " + o.toString();
+            case PREFIX:
+                return ")";
+            case INFIX:
+                return " )";
+            default:
+                return ") " + o.toString();
         }
     }
 
-    /** 
+    /**
      * Get the operator notation of an operation.
-     * 
+     *
      * @param o The operation being visited.
      * @return The operator notation of the operation.
      */

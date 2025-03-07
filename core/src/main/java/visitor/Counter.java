@@ -5,7 +5,7 @@ import calculator.MyNumber;
 import calculator.Operation;
 
 /**
- * Counter is a concrete visitor that serves to 
+ * Counter is a concrete visitor that serves to
  * count various aspects of arithmetic expression.
  * It can count:
  * <ul>
@@ -19,10 +19,14 @@ import calculator.Operation;
  */
 public class Counter extends Visitor {
 
-    /** The result of the count will be stored in this private variable */
+    /**
+     * The result of the count will be stored in this private variable
+     */
     private int computedResult;
 
-    /** The mode of the counter that will determine what aspect of the expression to count */
+    /**
+     * The mode of the counter that will determine what aspect of the expression to count
+     */
     private CounterMode mode;
 
     /**
@@ -43,23 +47,28 @@ public class Counter extends Visitor {
         this.mode = mode;
     }
 
-    /** getter method to obtain the result of the count.
+    /**
+     * getter method to obtain the result of the count.
      *
      * @return an Integer object containing the result of the count
      */
-    public Integer getResult() { return computedResult; }
+    public Integer getResult() {
+        return computedResult;
+    }
 
-    /** Use the visitor design pattern to visit a number.
+    /**
+     * Use the visitor design pattern to visit a number.
      *
-     *  @param n The number being visited
+     * @param n The number being visited
      */
     public void visit(MyNumber n) {
         computedResult = (mode == CounterMode.DEPTH || mode == CounterMode.OPERATIONS) ? 0 : 1;
     }
 
-    /** Use the visitor design pattern to visit an operation
+    /**
+     * Use the visitor design pattern to visit an operation
      *
-     *  @param o The operation being visited
+     * @param o The operation being visited
      */
     public void visit(Operation o) {
         int result = 0;
@@ -83,13 +92,19 @@ public class Counter extends Visitor {
      * Represents the different types of counts that can be measured in an arithmetic expression.
      */
     public enum CounterMode {
-        /** Counts the maximum depth of the expression tree. */
+        /**
+         * Counts the maximum depth of the expression tree.
+         */
         DEPTH,
 
-        /** Counts the number of operations (e.g., +, -, *, /) in the expression. */
+        /**
+         * Counts the number of operations (e.g., +, -, *, /) in the expression.
+         */
         OPERATIONS,
 
-        /** Counts the number of numeric values in the expression. */
+        /**
+         * Counts the number of numeric values in the expression.
+         */
         NUMBERS
     }
 }
