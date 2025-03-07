@@ -4,9 +4,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ main, dev, cli-module ]
   pull_request:
-    branches: [ main, dev ]
+    branches: [ main, dev, cli-module ]
 
 permissions:
   contents: read

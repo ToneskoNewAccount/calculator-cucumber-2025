@@ -2,9 +2,9 @@ name: CodeQL security analysis for Java
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ main, dev, cli-module ]
   pull_request:
-    branches: [ main, dev ]
+    branches: [ main, dev, cli-module ]
   schedule:
     - cron: '42 1 * * 2'
 

@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>coverage-module</artifactId>
-    <name>calculator-core</name>
+    <name>Coverage module</name>
 
     <dependencies>
         <dependency>
