@@ -18,6 +18,11 @@
             <artifactId>calculator-core</artifactId>
             <version>0.5.0</version>
         </dependency>
+        <dependency>
+            <groupId>calculator</groupId>
+            <artifactId>calculator-cli</artifactId>
+            <version>0.5.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -42,7 +47,3 @@
         </plugins>
     </build>
 </project>
-
-
-
-
