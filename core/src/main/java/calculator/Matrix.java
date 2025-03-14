@@ -136,70 +136,92 @@ public class Matrix {
      * Inverts a square matrix using Gauss-Jordan elimination.
      */
     public Matrix inverse() {
+        validateSquareMatrix();
+        double[][] augmented = createAugmentedMatrix();
+        applyGaussJordanElimination(augmented);
+        double[][] inverseData = extractInverse(augmented);
+        return new Matrix(inverseData);
+    }
+
+    private void validateSquareMatrix() {
         if (rows != cols) {
             throw new IllegalArgumentException("Matrix must be square to be inverted.");
         }
+    }
 
+    private double[][] createAugmentedMatrix() {
         int n = rows;
-        // Create the augmented matrix [A | I]
         double[][] augmented = new double[n][2 * n];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                augmented[i][j] = data[i][j];
-            }
-            for (int j = n; j < 2 * n; j++) {
-                augmented[i][j] = (i == (j - n)) ? 1.0 : 0.0;
-            }
-        }
+                System.arraycopy(data[i],0, augmented[i],0,n);
+                augmented[i][n + i] =  1.0 ;
 
-        // Apply Gauss-Jordan elimination
+        }
+        return augmented;
+    }
+
+    private void applyGaussJordanElimination(double[][] augmented) {
+        int n = rows;
         for (int i = 0; i < n; i++) {
-            // Find the pivot with the greatest absolute value in column i
-            int pivot = i;
-            double max = Math.abs(augmented[i][i]);
-            for (int j = i + 1; j < n; j++) {
-                double value = Math.abs(augmented[j][i]);
-                if (value > max) {
-                    max = value;
-                    pivot = j;
-                }
-            }
-            if (Math.abs(augmented[pivot][i]) < 1e-12) {
-                throw new ArithmeticException("Matrix is singular (pivot is zero).");
-            }
+            int pivotRow = findPivotRow(augmented, i, n);
+            swapRowsIfNeeded(augmented, i, pivotRow);
+            normalizePivotRow(augmented, i);
+            eliminateOtherRows(augmented, i, n);
+        }
+    }
 
-            // Swap row i with the pivot row if necessary
-            if (pivot != i) {
-                double[] temp = augmented[i];
-                augmented[i] = augmented[pivot];
-                augmented[pivot] = temp;
+    private int findPivotRow(double[][] augmented, int startRow, int n) {
+        int pivot = startRow;
+        double max = Math.abs(augmented[startRow][startRow]);
+        for (int j = startRow + 1; j < n; j++) {
+            double value = Math.abs(augmented[j][startRow]);
+            if (value > max) {
+                max = value;
+                pivot = j;
             }
+        }
+        if (Math.abs(augmented[pivot][startRow]) < 1e-12) {
+            throw new ArithmeticException("Matrix is singular (pivot is zero).");
+        }
+        return pivot;
+    }
 
-            // Normalize the pivot row
-            double pivotVal = augmented[i][i];
-            for (int j = 0; j < 2 * n; j++) {
-                augmented[i][j] /= pivotVal;
-            }
+    private void swapRowsIfNeeded(double[][] augmented, int currentRow, int pivotRow) {
+        if (pivotRow != currentRow) {
+            double[] temp = augmented[currentRow];
+            augmented[currentRow] = augmented[pivotRow];
+            augmented[pivotRow] = temp;
+        }
+    }
 
-            // Eliminate column i in all other rows
-            for (int j = 0; j < n; j++) {
-                if (j != i) {
-                    double factor = augmented[j][i];
-                    for (int k = 0; k < 2 * n; k++) {
-                        augmented[j][k] -= factor * augmented[i][k];
-                    }
+    private void normalizePivotRow(double[][] augmented, int pivotIndex) {
+        int n = rows;
+        double pivotVal = augmented[pivotIndex][pivotIndex];
+        for (int j = 0; j < 2 * n; j++) {
+            augmented[pivotIndex][j] /= pivotVal;
+        }
+    }
+
+    private void eliminateOtherRows(double[][] augmented, int pivotIndex, int n) {
+        for (int row = 0; row < n; row++) {
+            if (row != pivotIndex) {
+                double factor = augmented[row][pivotIndex];
+                for (int col = 0; col < 2 * n; col++) {
+                    augmented[row][col] -= factor * augmented[pivotIndex][col];
                 }
             }
         }
+    }
 
-        // Extract the right side of the augmented matrix, which is the inverse
+    private double[][] extractInverse(double[][] augmented) {
+        int n = rows;
         double[][] inverseData = new double[n][n];
         for (int i = 0; i < n; i++) {
             System.arraycopy(augmented[i], n, inverseData[i], 0, n);
         }
-
-        return new Matrix(inverseData);
+        return inverseData;
     }
+
 
     /**
      * toString() to represent the matrix as [[a,b],[c,d],...]
