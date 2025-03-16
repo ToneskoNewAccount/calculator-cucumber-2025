@@ -1,6 +1,7 @@
 package visitor;
 
 import calculator.Expression;
+import calculator.Matrix;
 import calculator.MyNumber;
 import calculator.Operation;
 
@@ -22,6 +23,11 @@ public class Evaluator extends Visitor {
      * The result of the evaluation will be stored in this private variable
      */
     private double computedValue;
+
+    /**
+     * The result of the evaluation for matrix expressions will be stored in this variable.
+     */
+    private Matrix computedMatrix;
 
     /**
      * getter method to obtain the result of the evaluation
@@ -61,6 +67,25 @@ public class Evaluator extends Visitor {
         }
         // store the accumulated result
         computedValue = temp;
+    }
+
+    /**
+     * Getter method to obtain the matrix result of the evaluation.
+     *
+     * @return a Matrix containing the matrix result of the evaluation.
+     */
+    public Matrix getMatrixResult() {
+        return computedMatrix;
+    }
+
+    /**
+     * Use the visitor design pattern to visit a matrix.
+     * This method stores the visited matrix as the computed matrix result.
+     * @param m The matrix being visited.
+     */
+    @Override
+    public void visit(Matrix m) {
+        computedMatrix = m;
     }
 
 }

@@ -1,6 +1,7 @@
 package visitor;
 
 import calculator.Expression;
+import calculator.Matrix;
 import calculator.MyNumber;
 import calculator.Operation;
 
@@ -86,6 +87,19 @@ public class Counter extends Visitor {
             result++;
 
         computedResult = result;
+    }
+    /**
+     * Use the visitor design pattern to visit a matrix.
+     * Matrices are treated as leaf nodes in the expression tree, similar to numbers.
+     * @param m The matrix being visited.
+     */
+    @Override
+    public void visit(Matrix m) {
+        if (mode == CounterMode.NUMBERS) {
+            computedResult = m.getRowCount() * m.getColCount();
+        } else {
+            computedResult = 0;
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package visitor;
 
+import calculator.Matrix;
 import calculator.MyNumber;
 import calculator.Notation;
 import calculator.Operation;
@@ -38,6 +39,7 @@ public class Printer extends Visitor {
         return computedResult;
     }
 
+
     /**
      * setter method to set the notation of the printer.
      *
@@ -54,6 +56,16 @@ public class Printer extends Visitor {
      */
     public void visit(MyNumber n) {
         computedResult = Double.toString(n.getValue());
+    }
+    /**
+     * Use the visitor design pattern to visit a matrix.
+     * This method converts the matrix into a string representation by simply
+     * calling its toString() method.
+     * @param m The matrix being visited.
+     */
+    @Override
+    public void visit(Matrix m) {
+        computedResult = m.toString();
     }
 
     /**
