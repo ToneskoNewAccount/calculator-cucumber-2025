@@ -1,5 +1,7 @@
 package visitor;
 
+
+import calculator.Matrix;
 import calculator.MyNumber;
 import calculator.Operation;
 
@@ -21,4 +23,14 @@ public abstract class Visitor {
      * @param o The operation being visited
      */
     public abstract void visit(Operation o);
+
+
+    /**
+     * The Visitor can traverse a matrix (a subtype of Expression)
+     *
+     * @param m The matrix being visited
+     */
+    public abstract void visit(Matrix m);
+
+
 }

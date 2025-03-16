@@ -1,76 +1,81 @@
 package calculator;
 
-public class Matrix {
-    private double[][] data;
-    private int rows;
-    private int cols;
+import visitor.Visitor;
+
+import java.util.Locale;
+
+/**
+ * Represents a 2D matrix of doubles, supporting addition, subtraction,
+ * multiplication, transposition, and inversion using Gauss-Jordan elimination.
+ * <p>
+ * This class does not provide a parse method; you must supply the data
+ * via the constructor.
+ * </p>
+ */
+public class Matrix implements Expression {
 
     /**
-     * Constructor that takes a 2D array of doubles.
+     * The internal 2D array storing the matrix data.
      */
-    public Matrix(double[][] data) {
-        this.rows = data.length;
-        this.cols = data[0].length;
+    private final double[][] data;
+
+    /**
+     * The number of rows in this matrix.
+     */
+    private final int rows;
+
+    /**
+     * The number of columns in this matrix.
+     */
+    private final int cols;
+
+    /**
+     * Constructs a Matrix from a 2D double array.
+     * All rows must have the same length.
+     *
+     * @param inputData the 2D double array representing the matrix
+     * @throws IllegalArgumentException if any row has a different length
+     */
+    public Matrix(double[][] inputData) {
+        if (inputData == null || inputData.length == 0) {
+            throw new IllegalArgumentException("Input data must be non-null and have at least one row.");
+        }
+        this.rows = inputData.length;
+        this.cols = inputData[0].length;
         this.data = new double[rows][cols];
 
         for (int i = 0; i < rows; i++) {
-            if (data[i].length != cols) {
+            if (inputData[i].length != cols) {
                 throw new IllegalArgumentException("All rows must have the same length.");
             }
-            System.arraycopy(data[i], 0, this.data[i], 0, cols);
+            System.arraycopy(inputData[i], 0, this.data[i], 0, cols);
         }
     }
 
     /**
-     * Static method to parse a string of the form [[1,2],[3,4]]
-     * and return a Matrix instance.
-     */
-    public static Matrix parse(String str) {
-        // Remove any surrounding whitespace
-        str = str.trim();
-
-        // Example: "[[1,2],[3,4]]"
-        // 1) remove the outer brackets
-        if (str.startsWith("[[") && str.endsWith("]]")) {
-            str = str.substring(2, str.length() - 2);
-        } else {
-            throw new IllegalArgumentException("Invalid format. Use [[a,b],[c,d]].");
-        }
-
-        // 2) split each row by "],["
-        //    e.g. we get "1,2" and "3,4"
-        String[] rowStrings = str.split("\\],\\[");
-
-        double[][] parsedData = new double[rowStrings.length][];
-
-        for (int i = 0; i < rowStrings.length; i++) {
-            // For each row, split by comma
-            String[] values = rowStrings[i].split(",");
-            parsedData[i] = new double[values.length];
-            for (int j = 0; j < values.length; j++) {
-                parsedData[i][j] = Double.parseDouble(values[j]);
-            }
-        }
-
-        return new Matrix(parsedData);
-    }
-
-    /**
-     * Returns the number of rows.
+     * Returns the number of rows in this matrix.
+     *
+     * @return the row count
      */
     public int getRowCount() {
         return rows;
     }
 
     /**
-     * Returns the number of columns.
+     * Returns the number of columns in this matrix.
+     *
+     * @return the column count
      */
     public int getColCount() {
         return cols;
     }
 
     /**
-     * Adds this matrix to another (this + other).
+     * Adds this matrix to another matrix of the same dimensions.
+     *
+     * @param other the matrix to add
+     * @return a new Matrix representing the sum
+     * @throws IllegalArgumentException if dimensions do not match
      */
     public Matrix add(Matrix other) {
         if (this.rows != other.rows || this.cols != other.cols) {
@@ -86,7 +91,11 @@ public class Matrix {
     }
 
     /**
-     * Subtracts another matrix from this one (this - other).
+     * Subtracts another matrix from this matrix.
+     *
+     * @param other the matrix to subtract
+     * @return a new Matrix representing the difference
+     * @throws IllegalArgumentException if dimensions do not match
      */
     public Matrix subtract(Matrix other) {
         if (this.rows != other.rows || this.cols != other.cols) {
@@ -102,14 +111,19 @@ public class Matrix {
     }
 
     /**
-     * Multiplies this matrix by another (this * other).
+     * Multiplies this matrix by another matrix.
+     *
+     * @param other the matrix to multiply
+     * @return a new Matrix representing the product
+     * @throws IllegalArgumentException if the number of columns of this matrix
+     *                                  does not match the number of rows of the other
      */
     public Matrix multiply(Matrix other) {
         if (this.cols != other.rows) {
             throw new IllegalArgumentException("Incompatible dimensions for multiplication.");
         }
-        double[][] result = new double[this.rows][other.cols];
-        for (int i = 0; i < this.rows; i++) {
+        double[][] result = new double[rows][other.cols];
+        for (int i = 0; i < rows; i++) {
             for (int j = 0; j < other.cols; j++) {
                 for (int k = 0; k < this.cols; k++) {
                     result[i][j] += this.data[i][k] * other.data[k][j];
@@ -120,7 +134,9 @@ public class Matrix {
     }
 
     /**
-     * Returns the transpose of this matrix (a new matrix).
+     * Returns the transpose of this matrix.
+     *
+     * @return a new Matrix representing the transpose
      */
     public Matrix transpose() {
         double[][] transposed = new double[cols][rows];
@@ -133,7 +149,12 @@ public class Matrix {
     }
 
     /**
-     * Inverts a square matrix using Gauss-Jordan elimination.
+     * Inverts this matrix using Gauss-Jordan elimination.
+     * This matrix must be square and non-singular.
+     *
+     * @return a new Matrix representing the inverse
+     * @throws IllegalArgumentException if the matrix is not square
+     * @throws ArithmeticException      if the matrix is singular (non-invertible)
      */
     public Matrix inverse() {
         validateSquareMatrix();
@@ -153,9 +174,8 @@ public class Matrix {
         int n = rows;
         double[][] augmented = new double[n][2 * n];
         for (int i = 0; i < n; i++) {
-                System.arraycopy(data[i],0, augmented[i],0,n);
-                augmented[i][n + i] =  1.0 ;
-
+            System.arraycopy(data[i], 0, augmented[i], 0, n);
+            augmented[i][n + i] = 1.0;
         }
         return augmented;
     }
@@ -222,9 +242,20 @@ public class Matrix {
         return inverseData;
     }
 
+    /**
+     * Accepts a Visitor for the visitor design pattern.
+     *
+     * @param v the Visitor
+     */
+    @Override
+    public void accept(Visitor v) {
+        v.visit(this);
+    }
 
     /**
-     * toString() to represent the matrix as [[a,b],[c,d],...]
+     * Returns a string representation of the matrix using Locale.US for consistent decimal points.
+     *
+     * @return the string representation of this matrix
      */
     @Override
     public String toString() {
@@ -233,7 +264,7 @@ public class Matrix {
         for (int i = 0; i < rows; i++) {
             sb.append("[");
             for (int j = 0; j < cols; j++) {
-                sb.append(data[i][j]);
+                sb.append(String.format(Locale.US, "%.1f", data[i][j]));
                 if (j < cols - 1) {
                     sb.append(",");
                 }
