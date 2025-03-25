@@ -1,6 +1,7 @@
 package visitor;
 
 import calculator.Expression;
+import calculator.LinearSystemExpression;
 import calculator.MyNumber;
 import calculator.Operation;
 
@@ -86,6 +87,12 @@ public class Counter extends Visitor {
             result++;
 
         computedResult = result;
+    }
+
+    @Override
+    public void visit(LinearSystemExpression expr) {
+
+        computedResult = 0;
     }
 
     /**

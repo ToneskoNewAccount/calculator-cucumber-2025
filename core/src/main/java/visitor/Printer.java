@@ -1,8 +1,6 @@
 package visitor;
 
-import calculator.MyNumber;
-import calculator.Notation;
-import calculator.Operation;
+import calculator.*;
 
 /**
  * Printer is a concrete visitor that serves to
@@ -120,4 +118,20 @@ public class Printer extends Visitor {
     private String getOperatorNotation(Operation o) {
         return notation == Notation.INFIX ? " " + o.toString() + " " : ", ";
     }
+    @Override
+    public void visit(LinearSystemExpression expr) {
+        // Solve the linear system and convert the result to a string
+        double[] solution = LinearEquationSolver.solve(expr.getMatrix(), expr.getVector());
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < solution.length; i++) {
+            sb.append(solution[i]);
+            if (i < solution.length - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("]");
+        computedResult = sb.toString();
+    }
+
 }

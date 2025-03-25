@@ -1,5 +1,6 @@
 package visitor;
 
+import calculator.LinearSystemExpression;
 import calculator.MyNumber;
 import calculator.Operation;
 
@@ -21,4 +22,10 @@ public abstract class Visitor {
      * @param o The operation being visited
      */
     public abstract void visit(Operation o);
+    /**
+     * The Visitor can traverse an operation (a subtype of Expression)
+     *
+     * @param expr The operation being visited
+     */
+    public abstract void visit(LinearSystemExpression expr);
 }
