@@ -44,6 +44,7 @@ public class Calculator {
      * Prints an arithmetic expression provided as input parameter with a specific notation.
      *
      * @param e the arithmetic Expression to be printed
+     * @param n the notation to convert the expression in
      * @see #print(Expression)
      * @see #printExpressionDetails(Expression)
      */
@@ -69,6 +70,7 @@ public class Calculator {
      * Prints verbose details of an arithmetic expression provided as input parameter with a specific notation.
      *
      * @param e the arithmetic Expression to be printed
+     * @param n the notation to convert the expression in
      * @see #print(Expression, Notation)
      */
     public void printExpressionDetails(Expression e, Notation n) {
@@ -95,7 +97,7 @@ public class Calculator {
      * @param e the arithmetic Expression to be evaluated
      * @return The result of the evaluation
      */
-    public double eval(Expression e) {
+    public MyNumber eval(Expression e) {
         // create a new visitor to evaluate expressions
         Evaluator v = new Evaluator();
         // and ask the expression to accept this visitor to start the evaluation process

@@ -60,7 +60,7 @@ public abstract class Operation implements Expression {
      * @param r second argument of the binary operation
      * @return result of computing the binary operation
      */
-    public abstract double op(double l, double r);
+    public abstract MyNumber op(MyNumber l, MyNumber r);
     // the operation itself is specified in the subclasses
 
     /**

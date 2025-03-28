@@ -23,9 +23,9 @@ class TestCounting {
 
     @BeforeEach
     void setUp() throws Exception {
-        List<Expression> params1 = Arrays.asList(new MyNumber(3), new MyNumber(4), new MyNumber(5));
-        List<Expression> params2 = Arrays.asList(new MyNumber(5), new MyNumber(4));
-        List<Expression> params3 = Arrays.asList(new Plus(params1), new Minus(params2), new MyNumber(7));
+        List<Expression> params1 = Arrays.asList(new MyInt(3), new MyInt(4), new MyInt(5));
+        List<Expression> params2 = Arrays.asList(new MyInt(5), new MyInt(4));
+        List<Expression> params3 = Arrays.asList(new Plus(params1), new Minus(params2), new MyInt(7));
         o = new Divides(params3);
         value1 = 8;
         value2 = 6;
@@ -34,7 +34,7 @@ class TestCounting {
 
     @Test
     void testNumberCounting() {
-        e = new MyNumber(value1);
+        e = new MyInt(value1);
 
         //test whether a number has zero depth (i.e. no nested expressions)
         Counter counter = new Counter(CounterMode.DEPTH);
@@ -55,7 +55,7 @@ class TestCounting {
     @ParameterizedTest
     @ValueSource(strings = {"*", "+", "/", "-"})
     void testOperationCounting(String symbol) {
-        List<Expression> params = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
+        List<Expression> params = Arrays.asList(new MyInt(value1), new MyInt(value2));
 
         try {
             //construct another type of operation depending on the input value

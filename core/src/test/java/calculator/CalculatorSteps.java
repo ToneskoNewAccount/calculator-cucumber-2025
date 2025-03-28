@@ -27,8 +27,8 @@ public class CalculatorSteps {
         c = new Calculator();
     }
 
-    @Given("an double operation {string}")
-    public void givenADoubleOperation(String s) {
+    @Given("an operation {string}")
+    public void givenAnOperation(String s) {
         // Write code here that turns the phrase above into concrete actions
         params = new ArrayList<>(); // create an empty set of parameters to be filled in
         try {
@@ -53,19 +53,32 @@ public class CalculatorSteps {
         params = new ArrayList<>();
         // Since we only use one line of input, we use get(0) to take the first line of the list,
         // which is a list of strings, that we will manually convert to double:
-        numbers.get(0).forEach(n -> params.add(new MyNumber(Double.parseDouble(n))));
-        params.forEach(n -> System.out.println("value =" + n));
+        numbers.get(0).forEach(n -> params.add(new MyDouble(Double.parseDouble(n))));
         op = null;
     }
 
     // The string in the Given annotation shows how to use regular expressions...
     // In this example, the notation d+ is used to represent numbers, i.e. nonempty sequences of digits
-    @Given("the sum of two numbers {double} and {double}")
+    @Given("the sum of two double numbers {double} and {double}")
     public void givenTheSum(double n1, double n2) {
         try {
             params = new ArrayList<>();
-            params.add(new MyNumber(n1));
-            params.add(new MyNumber(n2));
+            params.add(new MyDouble(n1));
+            params.add(new MyDouble(n2));
+            op = new Plus(params);
+        } catch (IllegalConstruction e) {
+            fail();
+        }
+    }
+
+    // The string in the Given annotation shows how to use regular expressions...
+    // In this example, the notation d+ is used to represent numbers, i.e. nonempty sequences of digits
+    @Given("the sum of two integer numbers {int} and {int}")
+    public void givenTheSum(int n1, int n2) {
+        try {
+            params = new ArrayList<>();
+            params.add(new MyInt(n1));
+            params.add(new MyInt(n2));
             op = new Plus(params);
         } catch (IllegalConstruction e) {
             fail();
@@ -81,11 +94,19 @@ public class CalculatorSteps {
         } else fail(notation + " is not a correct notation! ");
     }
 
-    @When("^I provide a (.*) number (-?\\d+(?:\\.\\d+)?)$")
-    public void whenIProvideANumber(String s, double val) {
+    @When("^I provide a (.*) double number (-?\\d+(?:\\.\\d+)?)$")
+    public void whenIProvideADoubleNumber(String s, double val) {
         //add extra parameter to the operation
         params = new ArrayList<>();
-        params.add(new MyNumber(val));
+        params.add(new MyDouble(val));
+        op.addMoreParams(params);
+    }
+
+    @When("^I provide a (.*) integer number (-?\\d+)")
+    public void whenIProvideAnIntegerNumber(String s, int val) {
+        //add extra parameter to the operation
+        params = new ArrayList<>();
+        params.add(new MyInt(val));
         op.addMoreParams(params);
     }
 
@@ -99,20 +120,36 @@ public class CalculatorSteps {
                 case "difference" -> op = new Minus(params);
                 default -> fail();
             }
-            assertEquals(val, c.eval(op));
+            MyNumber other = c.eval(op);
+            if (other instanceof MyInt other_int)
+                    assertEquals(val, (double) other_int.getIntValue());
+            else if (other instanceof  MyRationalNumber other_rat)
+                assertEquals(val, other_rat.getDoubleValue());
+            else if (other instanceof MyDouble other_double)
+                assertEquals(val, other_double.getDoubleValue());
+            else
+                fail();
         } catch (IllegalConstruction e) {
             fail();
         }
     }
 
-    @Then("the operation evaluates to {double}")
-    public void thenTheOperationEvaluatesTo(double val) {
-        assertEquals(val, c.eval(op), 0.0001);
+    @Then("the operation evaluates to an integer {int}")
+    public void thenTheOperationEvaluatesTo(int val) {
+        MyInt other = (MyInt) c.eval(op);
+        assertEquals(val, other.getIntValue());
     }
 
-    @Then("the operation evaluates to NaN")
+    @Then("the operation evaluates to a double {double}")
+    public void thenTheOperationEvaluatesTo(double val) {
+        MyDouble other = (MyDouble) c.eval(op);
+        assertEquals(val, other.getDoubleValue(), 1e-9);
+    }
+
+    @Then("the operation evaluates to a double NaN")
     public void thenTheOperationEvaluatesToNan() {
-        assertEquals(Double.NaN, c.eval(op), 0.0001);
+        MyDouble other = (MyDouble) c.eval(op);
+        assertEquals(Double.NaN, other.getDoubleValue());
     }
 }
 

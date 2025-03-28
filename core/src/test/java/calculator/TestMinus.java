@@ -13,13 +13,14 @@ import java.util.List;
 class TestMinus {
 
     private final int value1 = 8;
-    private final int value2 = 6;
+    private final int value2 = 2;
+
     private Minus op;
     private List<Expression> params;
 
     @BeforeEach
     void setUp() {
-        params = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
+        params = Arrays.asList(new MyInt(value1), new MyInt(value2));
         try {
             op = new Minus(params);
         } catch (IllegalConstruction e) {
@@ -47,9 +48,8 @@ class TestMinus {
     @Test
     void testEquals() {
         // Two similar expressions, constructed separately (and using different constructors) should not be equal
-        List<Expression> p = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
         try {
-            Minus e = new Minus(p);
+            Minus e = new Minus(params);
             assertEquals(op, e);
         } catch (IllegalConstruction e) {
             fail();
@@ -59,15 +59,14 @@ class TestMinus {
     @SuppressWarnings("ConstantConditions")
     @Test
     void testNull() {
-        assertDoesNotThrow(() -> op == null); // Direct way to to test if the null case is handled.
+        assertDoesNotThrow(() -> op == null); // Direct way to test if the null case is handled.
     }
 
     @Test
     void testHashCode() {
         // Two similar expressions, constructed separately (and using different constructors) should have the same hashcode
-        List<Expression> p = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
         try {
-            Minus e = new Minus(p);
+            Minus e = new Minus(params);
             assertEquals(e.hashCode(), op.hashCode());
         } catch (IllegalConstruction e) {
             fail();
@@ -80,4 +79,14 @@ class TestMinus {
         assertThrows(IllegalConstruction.class, () -> op = new Minus(params));
     }
 
+    @Test
+    void testGetNbParams() {
+        assertEquals(2, op.getArgs().size());
+    }
+
+    @Test
+    void testGetParam() {
+        assertEquals(new MyInt(value1), op.getArgs().get(0));
+        assertEquals(new MyInt(value2), op.getArgs().get(1));
+    }
 }

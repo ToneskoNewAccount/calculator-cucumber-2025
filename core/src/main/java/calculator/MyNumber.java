@@ -9,26 +9,7 @@ import visitor.Visitor;
  * @see Expression
  * @see Operation
  */
-public class MyNumber implements Expression {
-    private final double value;
-
-    /**
-     * getter method to obtain the value contained in the object
-     *
-     * @return The double number contained in the object
-     */
-    public double getValue() {
-        return value;
-    }
-
-    /**
-     * Constructor method
-     *
-     * @param v The double value to be contained in the object
-     */
-    public /*constructor*/ MyNumber(double v) {
-        value = v;
-    }
+public abstract class MyNumber implements Expression {
 
     /**
      * accept method to implement the visitor design pattern to traverse arithmetic expressions.
@@ -40,68 +21,47 @@ public class MyNumber implements Expression {
         v.visit(this);
     }
 
-
-    /**
-     * The depth of a number expression is always 0
-     *
-     * @return The depth of a number expression
-     */
-    public int countDepth() {
-        return 0;
-    }
-
-    /**
-     * The number of operations contained in a number expression is always 0
-     *
-     * @return The number of operations contained in a number expression
-     */
-    public int countOps() {
-        return 0;
-    }
-
-    /**
-     * The number of numbers contained in a number expression is always 1
-     *
-     * @return The number of numbers contained in  a number expression
-     */
-    public int countNbs() {
-        return 1;
-    }
-
     /**
      * Convert a number into a String to allow it to be printed.
      *
      * @return The String that is the result of the conversion.
      */
     @Override
-    public String toString() {
-        return Double.toString(value);
-    }
+    public abstract String toString();
 
     /**
      * Two MyNumber expressions are equal if the values they contain are equal
-     *
-     * @param o The object to compare to
+     * @param other The object to compare to
      * @return A boolean representing the result of the equality test
      */
-    @Override
-    public boolean equals(Object o) {
-        // No object should be equal to null (not including this check can result in an exception if a MyNumber is tested against null)
-        if (o == null) return false;
+    public abstract boolean equals(Object other);
 
-        // If the object is compared to itself then return true
-        if (o == this) {
-            return true;
-        }
+    /**
+     * Add this MyNumber with another one
+     * @param other The other MyNumber object to perform the operation with
+     * @return The result of the operation
+     */
+    public abstract MyNumber add(MyNumber other);
 
-        // If the object is of another type then return false
-        if (!(o instanceof MyNumber)) {
-            return false;
-        }
-        return this.value == ((MyNumber) o).value;
-        // Used == since the contained value is a primitive value
-        // If it had been a Java object, .equals() would be needed
-    }
+    /**
+     * Subtract this MyNumber with another one
+     * @param other The other MyNumber object to perform the operation with
+     * @return The result of the operation
+     */
+    public abstract MyNumber minus(MyNumber other);
+
+    /**
+     * Multiply this MyNumber with another one
+     * @param other The other MyNumber object to perform the operation with
+     * @return The result of the operation
+     */
+    public abstract MyNumber multiply(MyNumber other);
+    /**
+     * Divide this MyNumber with another one
+     * @param other The other MyNumber object to perform the operation with
+     * @return The result of the operation
+     */
+    public abstract MyNumber divide(MyNumber other);
 
     /**
      * The method hashCode needs to be overridden it the equals method is overridden;
@@ -111,8 +71,6 @@ public class MyNumber implements Expression {
      * @return The result of computing the hash.
      */
     @Override
-    public int hashCode() {
-        return (int) value;
-    }
+    public abstract int hashCode();
 
 }

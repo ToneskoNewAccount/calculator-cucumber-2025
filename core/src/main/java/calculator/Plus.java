@@ -32,7 +32,8 @@ public final class Plus extends Operation {
      * @param r The second double that should be added to the first
      * @return The double that is the result of the addition
      */
-    public double op(double l, double r) {
-        return (l + r);
+    @Override
+    public MyNumber op(MyNumber l, MyNumber r) {
+        return l.add(r);
     }
 }

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import visitor.Printer;
-
 /**
  * A very simple calculator in Java
  * University of Mons - UMONS
@@ -29,18 +27,18 @@ public class Main {
 
         try {
 
-            e = new MyNumber(8);
+            e = new MyInt(8);
             c.print(e);
             c.eval(e);
 
             List<Expression> params = new ArrayList<>();
-            Collections.addAll(params, new MyNumber(3), new MyNumber(4), new MyNumber(5));
+            Collections.addAll(params, new MyInt(3), new MyInt(4), new MyInt(5));
             e = new Plus(params);
             c.printExpressionDetails(e, Notation.PREFIX);
             c.eval(e);
 
             List<Expression> params2 = new ArrayList<>();
-            Collections.addAll(params2, new MyNumber(5), new MyNumber(3));
+            Collections.addAll(params2, new MyInt(5), new MyInt(3));
             e = new Minus(params2);
             c.print(e);
             c.eval(e);
@@ -52,7 +50,7 @@ public class Main {
             c.eval(e);
 
             List<Expression> params4 = new ArrayList<>();
-            Collections.addAll(params4, new Plus(params), new Minus(params2), new MyNumber(5));
+            Collections.addAll(params4, new Plus(params), new Minus(params2), new MyInt(5), MyRationalNumber.createRationalNumber(4, 5));
             e = new Divides(params4);
             c.print(e, Notation.POSTFIX);
             c.eval(e);

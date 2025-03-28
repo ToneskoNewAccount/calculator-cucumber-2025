@@ -1,9 +1,7 @@
 package calculator;
 
 //Import Junit5 libraries for unit testing:
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -13,18 +11,18 @@ import java.util.List;
 class TestDivides {
 
     private final int value1 = 8;
-    private final int value2 = 6;
+    private final int value2 = 4;
+    private final int value3 = 0;
     private Divides op;
     private List<Expression> params;
 
     @BeforeEach
     void setUp() {
-        params = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
+        params = Arrays.asList(new MyInt(value1), new MyInt(value2));
         try {
             op = new Divides(params);
-        } catch (IllegalConstruction e) {
-            fail();
         }
+        catch(IllegalConstruction e) { fail(); }
     }
 
     @Test
@@ -47,31 +45,27 @@ class TestDivides {
     @Test
     void testEquals() {
         // Two similar expressions, constructed separately (and using different constructors) should be equal
-        List<Expression> p = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
         try {
-            Divides d = new Divides(p);
+            Divides d = new Divides(params);
             assertEquals(op, d);
-        } catch (IllegalConstruction e) {
-            fail();
         }
+        catch(IllegalConstruction e) { fail(); }
     }
 
     @SuppressWarnings("ConstantConditions")
     @Test
     void testNull() {
-        assertDoesNotThrow(() -> op == null); // Direct way to to test if the null case is handled.
+        assertDoesNotThrow(() -> op==null); // Direct way to to test if the null case is handled.
     }
 
     @Test
     void testHashCode() {
         // Two similar expressions, constructed separately (and using different constructors) should have the same hashcode
-        List<Expression> p = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
         try {
-            Divides e = new Divides(p);
+            Divides e = new Divides(params);
             assertEquals(e.hashCode(), op.hashCode());
-        } catch (IllegalConstruction e) {
-            fail();
         }
+        catch(IllegalConstruction e) { fail(); }
     }
 
     @Test
@@ -83,25 +77,49 @@ class TestDivides {
     @Test
     void testDivisionByZero() {
         // We test that is does not throw an exception.
-        assertDoesNotThrow(() -> op.op(5.0, 0.0));
+        assertDoesNotThrow(() -> op.op(new MyInt(value1), new MyInt(value3)));
     }
 
     @Test
     void testDivisionByZeroReturnsNaN() {
-        double result = op.op(5.0, 0.0);
-        assertTrue(Double.isNaN(result), "Result should be NaN when dividing by zero.");
+        MyDouble result = (MyDouble) op.op(new MyInt(value1), new MyInt(value3));
+        assertTrue(Double.isNaN(result.getDoubleValue()), "Result should be NaN when dividing by zero.");
     }
 
     @Test
     void testNegativeDivisionByZeroReturnsNaN() {
-        double result = op.op(-5.0, 0.0);
-        assertTrue(Double.isNaN(result), "Negative number divided by zero should return NaN.");
+        MyDouble result = (MyDouble) op.op(new MyInt(value1), new MyInt(value3));
+        assertTrue(Double.isNaN(result.getDoubleValue()), "Negative number divided by zero should return NaN.");
     }
 
     @Test
     void testZeroDividedByZeroReturnsNaN() {
-        double result = op.op(0.0, 0.0);
-        assertTrue(Double.isNaN(result), "Zero divided by zero should return NaN.");
+        MyDouble result = (MyDouble) op.op(new MyInt(value3), new MyInt(value3));
+        assertTrue(Double.isNaN(result.getDoubleValue())); // "Zero divided by zero should return NaN.")
+    }
+
+    @Test
+    void testDivision() {
+        MyInt result = (MyInt) op.op(new MyInt(value1), new MyInt(value2));
+        assertEquals(2, result.getIntValue());
+    }
+
+    @Test
+    void testDivisionWithNegativeValues() {
+        MyInt result = (MyInt) op.op(new MyInt(-value1), new MyInt(value2));
+        assertEquals(-2, result.getIntValue());
+    }
+
+    @Test
+    void testDivisionWithNegativeDenominator() {
+        MyInt result = (MyInt) op.op(new MyInt(value1), new MyInt(-value2));
+        assertEquals(-2, result.getIntValue());
+    }
+
+    @Test
+    void testDivisionWithNegativeValuesAndDenominator() {
+        MyInt result = (MyInt) op.op(new MyInt(-value1), new MyInt(-value2));
+        assertEquals(2, result.getIntValue());
     }
 }
 

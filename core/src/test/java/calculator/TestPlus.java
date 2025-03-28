@@ -12,14 +12,14 @@ import java.util.List;
 
 class TestPlus {
 
-    private final int value1 = 8;
-    private final int value2 = 6;
     private Plus op;
     private List<Expression> params;
 
     @BeforeEach
     void setUp() {
-        params = new ArrayList<>(Arrays.asList(new MyNumber(value1), new MyNumber(value2)));
+        int value1 = 8;
+        int value2 = 6;
+        params = new ArrayList<>(Arrays.asList(new MyInt(value1), new MyInt(value2)));
         try {
             op = new Plus(params);
         } catch (IllegalConstruction e) {
@@ -47,12 +47,11 @@ class TestPlus {
     @Test
     void testEquals() {
         // Two similar expressions, constructed separately (and using different constructors) should be equal
-        ArrayList<Expression> p = new ArrayList<>(Arrays.asList(new MyNumber(value1), new MyNumber(value2)));
-        try {
-            Plus e = new Plus(p);
+         try {
+            Plus e = new Plus(params);
             assertEquals(op, e);
             assertEquals(e, e);
-            assertNotEquals(e, new Plus(new ArrayList<>(Arrays.asList(new MyNumber(5), new MyNumber(4)))));
+            assertNotEquals(e, new Plus(new ArrayList<>(Arrays.asList(new MyInt(5), new MyInt(4)))));
         } catch (IllegalConstruction e) {
             fail();
         }
@@ -61,15 +60,14 @@ class TestPlus {
     @SuppressWarnings("ConstantConditions")
     @Test
     void testNull() {
-        assertDoesNotThrow(() -> op == null); // Direct way to to test if the null case is handled.
+        assertDoesNotThrow(() -> op == null); // Direct way to test if the null case is handled.
     }
 
     @Test
     void testHashCode() {
         // Two similar expressions, constructed separately (and using different constructors) should have the same hashcode
-        ArrayList<Expression> p = new ArrayList<>(Arrays.asList(new MyNumber(value1), new MyNumber(value2)));
         try {
-            Plus e = new Plus(p);
+            Plus e = new Plus(params);
             assertEquals(e.hashCode(), op.hashCode());
         } catch (IllegalConstruction e) {
             fail();
@@ -81,5 +79,6 @@ class TestPlus {
         params = null;
         assertThrows(IllegalConstruction.class, () -> op = new Plus(params));
     }
+
 
 }

@@ -6,8 +6,7 @@ import calculator.Operation;
 
 import java.util.ArrayList;
 
-/**
- * Evaluation is a concrete visitor that serves to
+/** Evaluation is a concrete visitor that serves to
  * compute and evaluate the results of arithmetic expressions.
  */
 public class Evaluator extends Visitor {
@@ -15,52 +14,46 @@ public class Evaluator extends Visitor {
     /**
      * Default constructor of the class. Does not initialise anything.
      */
-    public Evaluator() {
-    }
+    public Evaluator() {}
 
-    /**
-     * The result of the evaluation will be stored in this private variable
-     */
-    private double computedValue;
+    /** The result of the evaluation will be stored in this private variable */
+    private MyNumber computedValue;
 
-    /**
-     * getter method to obtain the result of the evaluation
+    /** getter method to obtain the result of the evaluation
      *
      * @return an Double object containing the result of the evaluation
      */
-    public double getResult() {
-        return computedValue;
-    }
+    public MyNumber getResult() { return computedValue; }
 
-    /**
-     * Use the visitor design pattern to visit a number.
+    /** Use the visitor design pattern to visit a number.
      *
      * @param n The number being visited
      */
     public void visit(MyNumber n) {
-        computedValue = n.getValue();
+        computedValue = n;
     }
 
-    /**
-     * Use the visitor design pattern to visit an operation
+    /** Use the visitor design pattern to visit an operation
      *
      * @param o The operation being visited
      */
     public void visit(Operation o) {
-        ArrayList<Double> evaluatedArgs = new ArrayList<>();
+        ArrayList<MyNumber> evaluatedArgs = new ArrayList<>();
         //first loop to recursively evaluate each subexpression
-        for (Expression a : o.args) {
+        for(Expression a:o.args) {
             a.accept(this);
             evaluatedArgs.add(computedValue);
         }
+
         //second loop to accumulate all the evaluated subresults
-        double temp = evaluatedArgs.get(0);
+        MyNumber temp = evaluatedArgs.get(0);
         int max = evaluatedArgs.size();
-        for (int counter = 1; counter < max; counter++) {
-            temp = o.op(temp, evaluatedArgs.get(counter));
+        for(int counter=1; counter<max; counter++) {
+            temp = o.op(temp ,evaluatedArgs.get(counter));
         }
         // store the accumulated result
         computedValue = temp;
+
     }
 
 }

@@ -12,14 +12,14 @@ import java.util.List;
 
 class TestTimes {
 
-    private final int value1 = 8;
-    private final int value2 = 6;
     private Times op;
     private List<Expression> params;
 
     @BeforeEach
     void setUp() {
-        params = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
+        int value1 = 8;
+        int value2 = 6;
+        params = Arrays.asList(new MyInt(value1), new MyInt(value2));
         try {
             op = new Times(params);
         } catch (IllegalConstruction e) {
@@ -46,9 +46,8 @@ class TestTimes {
     @Test
     void testEquals() {
         // Two similar expressions, constructed separately (and using different constructors) should not be equal
-        List<Expression> p = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
         try {
-            Times e = new Times(p);
+            Times e = new Times(params);
             assertEquals(op, e);
         } catch (IllegalConstruction e) {
             fail();
@@ -63,9 +62,8 @@ class TestTimes {
     @Test
     void testHashCode() {
         // Two similar expressions, constructed separately (and using different constructors) should have the same hashcode
-        List<Expression> p = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
         try {
-            Times e = new Times(p);
+            Times e = new Times(params);
             assertEquals(e.hashCode(), op.hashCode());
         } catch (IllegalConstruction e) {
             fail();

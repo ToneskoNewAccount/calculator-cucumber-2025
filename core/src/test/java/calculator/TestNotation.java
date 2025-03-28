@@ -14,7 +14,7 @@ import java.util.List;
 
 class TestNotation {
 
-    /* This is an auxilary method to avoid code duplication.
+    /* This is an auxiliary method to avoid code duplication.
      */
     void testNotation(String s, Operation o, Notation n) {
         Printer p = new Printer(n);
@@ -22,7 +22,7 @@ class TestNotation {
         assertEquals(s, p.getResult());
     }
 
-    /* This is an auxilary method to avoid code duplication.
+    /* This is an auxiliary method to avoid code duplication.
      */
     void testNotations(String symbol, double value1, double value2, Operation op) {
         //prefix notation:
@@ -40,7 +40,7 @@ class TestNotation {
         double value2 = 6;
         Operation op = null;
         //List<Expression> params = new ArrayList<>(Arrays.asList(new MyNumber(value1),new MyNumber(value2)));
-        List<Expression> params = Arrays.asList(new MyNumber(value1), new MyNumber(value2));
+        List<Expression> params = Arrays.asList(new MyDouble(value1), new MyDouble(value2));
         try {
             //construct another type of operation depending on the input value
             //of the parameterised test
@@ -61,16 +61,16 @@ class TestNotation {
     void testComplexNotations() {
         Operation o = null;
         try {
-            List<Expression> params1 = Arrays.asList(new MyNumber(3), new MyNumber(4), new MyNumber(5));
-            List<Expression> params2 = Arrays.asList(new MyNumber(5), new MyNumber(4));
-            List<Expression> params3 = Arrays.asList(new Plus(params1), new Minus(params2), new MyNumber(7));
+            List<Expression> params1 = Arrays.asList(new MyInt(3), new MyInt(4), new MyInt(5));
+            List<Expression> params2 = Arrays.asList(new MyInt(5), new MyInt(4));
+            List<Expression> params3 = Arrays.asList(new Plus(params1), new Minus(params2), new MyInt(7));
             o = new Divides(params3);
         } catch (IllegalConstruction e) {
             fail();
         }
 
         // Use printer to test the output of the complex expression
-        String s = "( ( 3.0 + 4.0 + 5.0 ) / ( 5.0 - 4.0 ) / 7.0 )";
+        String s = "( ( 3 + 4 + 5 ) / ( 5 - 4 ) / 7 )";
         Notation n = Notation.INFIX;
 
         Printer p = new Printer(n);
@@ -78,14 +78,14 @@ class TestNotation {
         assertEquals(s, p.getResult());
 
         // Same but with postfix notation
-        s = "((3.0, 4.0, 5.0) +, (5.0, 4.0) -, 7.0) /";
+        s = "((3, 4, 5) +, (5, 4) -, 7) /";
         n = Notation.POSTFIX;
         p.setNotation(n);
         o.accept(p);
         assertEquals(s, p.getResult());
 
         // Same but with prefix notation
-        s = "/ (+ (3.0, 4.0, 5.0), - (5.0, 4.0), 7.0)";
+        s = "/ (+ (3, 4, 5), - (5, 4), 7)";
         n = Notation.PREFIX;
         p.setNotation(n);
         o.accept(p);
