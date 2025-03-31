@@ -33,7 +33,11 @@ jobs:
         id: pmd
         uses: pmd/pmd-github-action@v2
         with:
-          rulesets: 'rulesets/java/quickstart.xml'
+          rulesets: |
+            rulesets/java/quickstart.xml,
+            rulesets/java/design.xml,
+            rulesets/java/errorprone.xml,
+            rulesets/java/security.xml
           sourcePath: 'src/main/java'
           analyzeModifiedFilesOnly: false
       - name: Fail build if there are violations
