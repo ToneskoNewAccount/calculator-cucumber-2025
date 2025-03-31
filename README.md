@@ -7,6 +7,9 @@ Test coverage: ![Coverage](.github/badges/jacoco.svg)
 
 Security analysis: ![CodeQL](https://github.com/JeremyDelnatte/calculator-cucumber-2025/actions/workflows/codeql.yml/badge.svg)
 
+Code scanning alerts : ![PMD Analysis](https://github.com/JeremyDelnatte/calculator-cucumber-2025/actions/workflows/pmd.yml/badge.svg)
+
+Security score: ![ScoreCard Analysis](https://github.com/JeremyDelnatte/calculator-cucumber-2025/actions/workflows/scorecard.yml/badge.svg)
 
 # Calculating arithmetic expressions
 
