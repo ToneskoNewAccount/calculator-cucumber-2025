@@ -4,9 +4,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
 
 permissions:
   contents: read
@@ -28,7 +28,7 @@ jobs:
       
     - id: setupjava
       name: Set up with Java 23
-      uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+      uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
       with:
         distribution: 'temurin'
         java-version: 23
@@ -41,7 +41,7 @@ jobs:
     - id: testreport
       name: Publish Test Report
       if: ${{ always() }}
-      uses: scacap/action-surefire-report@a2911bd1a4412ec18dde2d93b1758b3e56d2a880 # v1.8.0
+      uses: scacap/action-surefire-report@1a128e49c0585bc0b8e38e541ac3b6e35a5bc727 # v1.9.0
       
     - name: Generate JaCoCo Badge
       id: jacoco
