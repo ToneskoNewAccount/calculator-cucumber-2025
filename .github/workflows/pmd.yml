@@ -5,22 +5,24 @@
 
 name: pmd
 
-on:
-  check_run:
-    types: [completed]
-    branches: [ main, dev ]
+on: [push, pull_request]
 
 jobs:
-  test-jobs:
-    name: pmd test jobs
+  pmd:
+    needs: maven
     runs-on: ubuntu-latest
-    if: |
-      github.event.check_run.name == 'building, testing and quality analysis' &&
-      github.event.check_run.conclusion == 'success'
-    steps:
-      - name: Log check_run event data
-        run: echo "${{ toJson(github.event) }}"
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Run PMD
+        run: mvn pmd:pmd
 #      - uses: actions/checkout@3b9b8c884f6b4bb4d5be2779c26374abadae0871
 #        with:
 #          repository: ${{ github.event.workflow_run.head_repository.full_name }}
