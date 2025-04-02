@@ -30,7 +30,6 @@ jobs:
     steps:
       - uses: actions/checkout@3b9b8c884f6b4bb4d5be2779c26374abadae0871
         with:
-          repository: '${{ github.event.workflow_run.head_repository.full_name }}'
           ref: ${{ github.event.workflow_run.head_branch }}
       - run: git branch
       - name: Set up JDK 23
