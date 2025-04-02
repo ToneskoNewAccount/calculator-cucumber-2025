@@ -41,16 +41,22 @@ jobs:
             rulesets/java/security.xml
           sourcePath: 'src/main/java'
           analyzeModifiedFilesOnly: false
+      # Upload the results as artifacts (optional). Commenting out will disable uploads of run results in SARIF
+      # format to the repository Actions tab.
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: SARIF file
+          path: results.sarif
+          retention-days: 5
+
+      # Upload the results to GitHub's code scanning dashboard.
+      - name: "Upload to code-scanning"
+        uses: github/codeql-action/upload-sarif@f8367fb0632ad49566c00128a7ed86aff914dc74 #v3.28.10
+        with:
+          sarif_file: results.sarif
+
+      # Fail the build if there are violations
       - name: Fail build if there are violations
         if: steps.pmd.outputs.violations != 0
         run: exit 1
-      - name: Generate Report Summary
-        run: |
-          echo '### PMD Static Analysis Report' >> $GITHUB_STEP_SUMMARY
-          if [ -f target/pmd-report.xml ]; then
-            echo '```xml' >> $GITHUB_STEP_SUMMARY
-            cat target/pmd-report.xml | head -n 50 >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-          else
-            echo 'No PMD report found. Check workflow logs for details.' >> $GITHUB_STEP_SUMMARY
-          fi
