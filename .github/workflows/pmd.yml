@@ -1,4 +1,9 @@
-name: PMD
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: pmd
 
 on:
   workflow_run:
@@ -8,6 +13,7 @@ on:
 
 jobs:
   pmd:
+    needs: maven
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +23,35 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '23'
 
       - name: Run PMD
         run: mvn pmd:pmd
+#      - uses: actions/checkout@3b9b8c884f6b4bb4d5be2779c26374abadae0871
+#        with:
+#          repository: ${{ github.event.workflow_run.head_repository.full_name }}
+#          ref: ${{ github.event.workflow_run.head_branch }}
+#      - run: git branch
+#      - run: git log -1
+#  pmd-code-scan:
+#    name: PMD code scan
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@3b9b8c884f6b4bb4d5be2779c26374abadae0871
+#        with:
+#          ref: ${{ github.event.workflow_run.head_branch }}
+#      - run: git branch
+#      - name: Run PMD
+#        id: pmd
+#        uses: pmd/pmd-github-action@1e12f89d3b1f899c03c8053cf35ca345d9ee8194
+#        with:
+#          rulesets: |
+#            rulesets/java/quickstart.xml,
+#            rulesets/java/design.xml,
+#            rulesets/java/errorprone.xml,
+#            rulesets/java/security.xml
+#          sourcePath: 'src/main/java'
+#          analyzeModifiedFilesOnly: false
+#      - name: Fail build if there are violations
+#        if: steps.pmd.outputs.violations != 0
+#        run: exit 1
