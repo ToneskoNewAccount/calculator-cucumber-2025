@@ -39,6 +39,8 @@ jobs:
           java-version: '23'
           distribution: 'temurin'
           cache: 'maven'
+      - name: Log workflow event data
+        run: echo "${{ toJson(github.event) }}"
       - name: Run PMD
         id: pmd
         uses: pmd/pmd-github-action@1e12f89d3b1f899c03c8053cf35ca345d9ee8194
