@@ -7,9 +7,8 @@ name: pmd
 
 on:
   workflow_run:
-    workflows: ["Java CI with Maven"]  # Name of your existing Maven build workflow
-    types:
-      - completed
+    workflows: [maven]  # Name of your existing Maven build workflow
+    types: [completed]
 
 permissions:
   contents: read # for actions/checkout to fetch code
