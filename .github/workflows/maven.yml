@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: building, testing and quality analysis
+    name: maven
     runs-on: ubuntu-latest
 
     steps:
