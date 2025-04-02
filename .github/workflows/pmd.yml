@@ -7,7 +7,7 @@ name: pmd
 
 on:
   workflow_run:
-    workflows: [ maven ]  # Name of your existing Maven build workflow
+    workflows: [Java CI with Maven]  # Name of your existing Maven build workflow
     types:
       - completed
 
