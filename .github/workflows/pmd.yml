@@ -21,6 +21,7 @@ jobs:
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
 #      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
     runs-on: ubuntu-latest
+    needs: [maven]
     steps:
       - uses: actions/checkout@3b9b8c884f6b4bb4d5be2779c26374abadae0871
       - name: Set up JDK 23
@@ -43,3 +44,13 @@ jobs:
       - name: Fail build if there are violations
         if: steps.pmd.outputs.violations != 0
         run: exit 1
+      - name: Generate Report Summary
+        run: |
+          echo '### PMD Static Analysis Report' >> $GITHUB_STEP_SUMMARY
+          if [ -f target/pmd-report.xml ]; then
+            echo '```xml' >> $GITHUB_STEP_SUMMARY
+            cat target/pmd-report.xml | head -n 50 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo 'No PMD report found. Check workflow logs for details.' >> $GITHUB_STEP_SUMMARY
+          fi
