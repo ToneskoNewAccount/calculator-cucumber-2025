@@ -1,6 +1,6 @@
 # Build and test a Java project with Maven, and compute and report test coverage 
 
-name: Java CI with Maven
+name: "Maven"
 
 on:
   push:
@@ -8,17 +8,10 @@ on:
   pull_request:
     branches: [ main, dev ]
 
-#permissions:
-#  contents: read
-
 jobs:
   build:
     name: building, testing and quality analysis
     runs-on: ubuntu-latest
-
-    permissions:
-      checks: write
-      contents: write
 
     steps:
     - id: checkout
