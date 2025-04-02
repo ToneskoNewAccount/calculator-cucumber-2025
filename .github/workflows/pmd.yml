@@ -7,18 +7,19 @@ name: pmd
 
 on:
   workflow_run:
-    workflows: ["Maven"]
-
-
+    workflows: [ Maven ]
 
 jobs:
   test-jobs:
+    name: pmd test jobs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3b9b8c884f6b4bb4d5be2779c26374abadae0871
         with:
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
           ref: ${{ github.event.workflow_run.head_branch }}
       - run: git branch
+      - run: git log -1
 #  pmd-code-scan:
 #    name: PMD code scan
 #    runs-on: ubuntu-latest
