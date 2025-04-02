@@ -1,10 +1,14 @@
-[![](https://img.shields.io/github/v/release/University-of-Mons/calculator-cucumber-2025?label=Latest%20Release)](https://github.com/University-of-Mons/calculator-cucumber/releases/latest)
+[![](https://img.shields.io/github/v/release/JeremyDelnatte/calculator-cucumber-2025?label=Latest%20Release)](https://github.com/JeremyDelnatte/calculator-cucumber-2025/releases/latest)
 
-Code quality: ![Maven Build](https://github.com/University-of-Mons/calculator-cucumber-2025/actions/workflows/maven.yml/badge.svg)
+Code quality: ![Maven Build](https://github.com/JeremyDelnatte/calculator-cucumber-2025/actions/workflows/maven.yml/badge.svg)
 
 Test coverage: ![Coverage](.github/badges/jacoco.svg)
 ![Branches](.github/badges/branches.svg)
 
+Security analysis: ![CodeQL](https://github.com/JeremyDelnatte/calculator-cucumber-2025/actions/workflows/codeql.yml/badge.svg)
+
+Code scanning alerts: ![PMD Analysis](https://github.com/JeremyDelnatte/calculator-cucumber-2025/actions/workflows/pmd.yml/badge.svg)
+Security score: ![ScoreCard Analysis](https://github.com/JeremyDelnatte/calculator-cucumber-2025/actions/workflows/scorecard.yml/badge.svg)
 
 # Calculating arithmetic expressions
 
