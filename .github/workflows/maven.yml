@@ -8,8 +8,8 @@ on:
   pull_request:
     branches: [ main, dev ]
 
-permissions:
-  contents: read
+#permissions:
+#  contents: read
 
 jobs:
   build:
@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      # need write permissions for publishing the test report
       checks: write
       contents: write
 
