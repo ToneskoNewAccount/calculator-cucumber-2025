@@ -1,0 +1,18 @@
+name: Test
+
+on:
+  workflow_run:
+    workflows: ["Maven"]
+    types: [completed]
+    branches: [ main, dev ]
+
+jobs:
+    test-jobs:
+        name: test jobs
+        runs-on: ubuntu-latest
+        if: |
+          github.event.workflow_run.name == 'building, testing and quality analysis' &&
+          github.event.workflow_run.conclusion == 'success'
+        steps:
+        - name: Log workflow_run event data
+          run: echo "${{ toJson(github.event) }}"
