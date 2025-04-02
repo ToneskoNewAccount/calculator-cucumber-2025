@@ -1,6 +1,6 @@
 # Build and test a Java project with Maven, and compute and report test coverage 
 
-name: maven
+name: Java CI with Maven
 
 on:
   push:
