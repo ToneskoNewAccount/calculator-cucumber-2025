@@ -6,20 +6,27 @@
 name: pmd
 
 on:
-  workflow_run:
-    workflows: [ Maven ]
+  check_run:
+    types: [completed]
+    branches: [ main, dev ]
 
 jobs:
   test-jobs:
     name: pmd test jobs
     runs-on: ubuntu-latest
+    if: |
+      github.event.check_run.name == 'building, testing and quality analysis' &&
+      github.event.check_run.conclusion == 'success'
     steps:
-      - uses: actions/checkout@3b9b8c884f6b4bb4d5be2779c26374abadae0871
-        with:
-          repository: ${{ github.event.workflow_run.head_repository.full_name }}
-          ref: ${{ github.event.workflow_run.head_branch }}
-      - run: git branch
-      - run: git log -1
+      - name: Log check_run event data
+        run: echo "${{ toJson(github.event) }}"
+
+#      - uses: actions/checkout@3b9b8c884f6b4bb4d5be2779c26374abadae0871
+#        with:
+#          repository: ${{ github.event.workflow_run.head_repository.full_name }}
+#          ref: ${{ github.event.workflow_run.head_branch }}
+#      - run: git branch
+#      - run: git log -1
 #  pmd-code-scan:
 #    name: PMD code scan
 #    runs-on: ubuntu-latest
