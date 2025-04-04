@@ -39,6 +39,7 @@ jobs:
         run: mvn jacoco:report
       - name: Generate PMD Report
         run: mvn pmd:pmd
+
       - name: Archive reports
         run: |
           mkdir -p reports
@@ -46,6 +47,17 @@ jobs:
           [ -f target/site/jacoco/index.html ] && cp target/site/jacoco/index.html reports/coverage.html || echo "Coverage report missing"
           [ -f target/site/pmd.html ] && cp target/site/pmd.html reports/pmd.html || echo "PMD report missing"
           tar -czf reports.tar.gz reports
+
+      - name: Get Release Tag
+        id: get_tag
+        run: |
+          TAG_NAME=${{ github.event.release.tag_name }}
+          if [ -z "$TAG_NAME" ]; then
+            echo "No tag found. Exiting."
+            exit 1
+          fi
+          echo "tag=$TAG_NAME" >> $GITHUB_ENV
+
       - name: Upload report to release
         uses: softprops/action-gh-release@v1
         with:
