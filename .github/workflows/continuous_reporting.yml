@@ -10,7 +10,7 @@ on:
       - published
 
 permissions:
-  contents: write # Needed to upload assets to the release
+  contents: read # Needed to upload assets to the release
 
 jobs:
   generate-report:
