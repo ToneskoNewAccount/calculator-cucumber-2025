@@ -19,54 +19,33 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v4
-      
-      # Set up JDK 23
       - name: Set up JDK 23
         uses: actions/setup-java@v4
         with:
           java-version: '23'
           distribution: 'temurin'
           cache: 'maven'
-
-      # Run tests
       - name: Run tests
         run: mvn test
-
-      # Ensure tests pass
       - name: Ensure tests pass
         run: |
           if [ $? -ne 0 ]; then
             echo "Tests failed. Stopping release."
             exit 1
           fi
-
-      # Generate JavaDoc
       - name: Generate JavaDoc
         run: mvn javadoc:javadoc
-
-      # Generate Coverage Report
       - name: Generate Coverage Report
         run: mvn jacoco:report
-
-      # Generate PMD Report
       - name: Generate PMD Report
         run: mvn pmd:pmd
-
-      # Generate site (this ensures all reports are generated)
-      - name: Generate Site Reports
-        run: mvn site
-
-      # Archive reports
       - name: Archive reports
         run: |
           mkdir -p reports
-          # Ensure the reports folder exists before copying files
-          cp -r target/site/apidocs reports/javadoc
-          cp target/site/jacoco/index.html reports/coverage.html
-          cp target/site/pmd.html reports/pmd.html
+          [ -d target/site/apidocs ] && cp -r target/site/apidocs reports/javadoc || echo "JavaDoc missing"
+          [ -f target/site/jacoco/index.html ] && cp target/site/jacoco/index.html reports/coverage.html || echo "Coverage report missing"
+          [ -f target/site/pmd.html ] && cp target/site/pmd.html reports/pmd.html || echo "PMD report missing"
           tar -czf reports.tar.gz reports
-
-      # Upload the report to the release
       - name: Upload report to release
         uses: softprops/action-gh-release@v1
         with:
