@@ -1,6 +1,10 @@
 name: continuous-reporting
 
 on:
+  workflow_run:
+    workflows: ["Java CI with Maven"]
+    types:
+      - completed
   release:
     types:
       - published
