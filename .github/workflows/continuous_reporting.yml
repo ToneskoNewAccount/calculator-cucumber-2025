@@ -26,12 +26,10 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Run tests
-        run: mvn test
-
-      - name: Ensure tests pass
+      - name: Run tests and ensure they pass
         run: |
-          if [ $? -ne 0 ]; then
+          echo "Running tests..."
+          if ! mvn test; then
             echo "Tests failed. Stopping report generation."
             exit 1
           fi
