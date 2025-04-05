@@ -16,7 +16,7 @@ Feature: Double Arithmetic Expressions
     Given an double operation '+'
     When I provide a first number 4
     And I provide a second number 5
-    Then the operation evaluates to 10
+    Then the operation evaluates to 9
 
   Scenario: Subtracting two double numbers
     Given an double operation '-'
