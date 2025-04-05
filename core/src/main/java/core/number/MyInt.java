@@ -82,4 +82,9 @@ public class MyInt extends MyRationalNumber {
     public int hashCode() {
         return value.hashCode();
     }
+
+    @Override
+    public MyNumber abs() {
+        return new MyInt(Math.abs(value));
+    }
 }

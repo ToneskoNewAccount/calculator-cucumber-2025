@@ -149,4 +149,12 @@ public class MyComplexNumber extends MyNumber {
     public int hashCode() {
         return 31 * real.getDoubleValue().intValue() + imag.getDoubleValue().intValue();
     }
+
+    @Override
+    public MyNumber abs() {
+        // We can cast to MyDouble since the real and imaginary parts are MyDouble
+        // and since the we multiply and add them together it will be a MyDouble.
+        // TODO: Use the MyNumber.sqrt() method that will be added in the future.
+        return new MyDouble(Math.sqrt(((MyDouble) real.multiply(real).add(imag.multiply(imag))).getDoubleValue()));
+    }
 }

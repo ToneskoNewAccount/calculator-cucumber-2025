@@ -46,6 +46,9 @@ public class MyDouble extends MyNumber {
         if (!(other instanceof MyDouble otherDouble))
             return false;
 
+        if (value.isNaN())
+            return otherDouble.value.isNaN();
+
         return Math.abs(value - otherDouble.value) < EPSILON;
     }
 
@@ -115,5 +118,10 @@ public class MyDouble extends MyNumber {
 
     public MyComplexNumber getComplexValue() {
         return new MyComplexNumber(this, new MyInt(0));
+    }
+
+    @Override
+    public MyNumber abs() {
+        return new MyDouble(Math.abs(value));
     }
 }

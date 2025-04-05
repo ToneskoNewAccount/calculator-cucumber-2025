@@ -1,7 +1,5 @@
 package core.steps;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,6 @@ public class MyIntSteps {
 
     @Then("the operation evaluates to an integer {int}")
     public void thenTheOperationEvaluatesTo(int val) {
-        MyInt other = (MyInt) CommonSteps.c.eval(CommonSteps.op);
-        assertEquals(val, other.getIntValue());
+        CommonSteps.operationEvaluation(new MyInt(val));
     }
 }

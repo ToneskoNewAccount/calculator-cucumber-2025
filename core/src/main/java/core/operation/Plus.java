@@ -11,12 +11,12 @@ import core.number.MyNumber;
  * The class extends an abstract superclass Operation.
  * Other subclasses of Operation represent other arithmetic operations.
  *
- * @see Operation
+ * @see BinaryOperation
  * @see Minus
  * @see Times
  * @see Divides
  */
-public final class Plus extends Operation {
+public final class Plus extends BinaryOperation {
     /**
      * Class constructor specifying a number of Expressions to add.
      *

@@ -169,3 +169,19 @@ Feature: Complex Number Operations
     When I provide a double number 7.5
     And I provide a complex number 7.5 + 0.0i
     Then the operation evaluates to a double 0.0
+
+  Scenario Outline: Evaluating absolute value of a complex number
+    Given an operation 'abs'
+    When I provide a complex number <n>
+    Then the operation evaluates to an integer <result>
+
+    Examples:
+      | n          |       result |
+      |     3 + 4i |            5 |
+      |     4 - 3i |            5 |
+      |     0 + 0i |            0 |
+
+  Scenario: Evaluating absolute value of a complex number with double numbers
+    Given an operation 'abs'
+    When I provide a complex number 3.5 + 4.5i
+    Then the operation evaluates to a double 5.7008771255

@@ -249,3 +249,14 @@ Feature: Rational Number Arithmetic
           | 1/2  | 3/4  |  3/8  |
           | 5/3  | 2/5  |  2/3 |
           | 7/4  | 3/5  |  21/20 |
+
+  Scenario Outline: Evaluating absolute value of a rational number
+    Given an operation 'abs'
+    When I provide a rational number <n>
+    Then the operation evaluates to a rational <result>
+
+    Examples:
+      | n    | result |
+      |  5/3 |    5/3 |
+      | -5/3 |    5/3 |
+      | 5/-3 |    5/3 |

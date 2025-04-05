@@ -66,6 +66,12 @@ public abstract class MyNumber implements Expression {
     public abstract MyNumber divide(MyNumber other);
 
     /**
+     * Compute the absolute value of this MyNumber
+     * @return The result of the operation
+     */
+    public abstract MyNumber abs();
+
+    /**
      * The method hashCode needs to be overridden it the equals method is overridden;
      * otherwise there may be problems when you use your object in hashed collections
      * such as HashMap, HashSet, LinkedHashSet.

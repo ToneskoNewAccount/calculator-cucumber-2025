@@ -101,3 +101,14 @@ Feature: Integer Arithmetic Expressions
     When I provide an integer number 0
     And I provide an integer number 0
     Then the operation evaluates to a double NaN
+
+  Scenario Outline: Evaluating absolute value of an integer number
+    Given an operation 'abs'
+    When I provide an integer number <n>
+    Then the operation evaluates to an integer <result>
+
+    Examples:
+      | n  | result |
+      |  5 |      5 |
+      | -5 |      5 |
+      |  0 |      0 |

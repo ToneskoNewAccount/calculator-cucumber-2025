@@ -1,7 +1,8 @@
 package core.visitor;
 
 import core.number.MyNumber;
-import core.operation.Operation;
+import core.operation.BinaryOperation;
+import core.operation.UnaryOperation;
 
 /**
  * Printer is a concrete visitor that serves to
@@ -60,32 +61,32 @@ public class Printer extends Visitor {
      *
      * @param o The operation being visited.
      */
-    public void visit(Operation o) {
-        String result = getStartNotation(o);
+    public void visit(BinaryOperation o) {
+        String result = getStartNotation(o.toString());
 
         for (int i = 0; i < o.args.size(); i++) {
             o.args.get(i).accept(this);
             result += computedResult;
 
             if (i < o.args.size() - 1) {
-                result += getOperatorNotation(o);
+                result += getOperatorNotation(o.toString());
             }
         }
 
-        result += getEndNotation(o);
+        result += getEndNotation(o.toString());
         computedResult = result;
     }
 
     /**
      * Get the start of the notation of an operation.
      *
-     * @param o The operation being visited.
+     * @param symbol The symbol of the operation.
      * @return The start notation of the operation.
      */
-    private String getStartNotation(Operation o) {
+    private String getStartNotation(String symbol) {
         switch (notation) {
             case PREFIX:
-                return o.toString() + " (";
+                return symbol + " (";
             case INFIX:
                 return "( ";
             default:
@@ -96,27 +97,63 @@ public class Printer extends Visitor {
     /**
      * Get the end of the notation of an operation.
      *
-     * @param o The operation being visited.
+     * @param symbol The symbol of the operation.
      * @return The end notation of the operation.
      */
-    private String getEndNotation(Operation o) {
+    private String getEndNotation(String symbol) {
         switch (notation) {
             case PREFIX:
                 return ")";
             case INFIX:
                 return " )";
             default:
-                return ") " + o.toString();
+                return ") " + symbol;
         }
     }
 
     /**
      * Get the operator notation of an operation.
      *
-     * @param o The operation being visited.
+     * @param symbol The symbol of the operation.
      * @return The operator notation of the operation.
      */
-    private String getOperatorNotation(Operation o) {
-        return notation == Notation.INFIX ? " " + o.toString() + " " : ", ";
+    private String getOperatorNotation(String symbol) {
+        return notation == Notation.INFIX ? " " + symbol + " " : ", ";
+    }
+
+
+    /**
+     * Use the visitor design pattern to visit an operation.
+     *
+     * @param o The operation being visited.
+     */
+    public void visit(UnaryOperation o) {
+
+        String result;
+        if (notation == Notation.INFIX) {
+            result = o.toString() + " ";
+
+            if (!(o.arg instanceof BinaryOperation)) {
+                result += "( ";
+            }
+
+        } else {
+            result = getStartNotation(o.toString());
+        }
+
+        o.arg.accept(this);
+        result += computedResult;
+
+
+        if (notation == Notation.INFIX) {
+            if (!(o.arg instanceof BinaryOperation)) {
+                result += " )";
+            }
+
+        } else {
+            result += getEndNotation(o.toString());
+        }
+
+        computedResult = result;
     }
 }

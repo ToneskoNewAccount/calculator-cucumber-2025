@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import core.Expression;
 import core.number.MyNumber;
-import core.operation.Operation;
+import core.operation.BinaryOperation;
+import core.operation.UnaryOperation;
 
 /** Evaluation is a concrete visitor that serves to
  * compute and evaluate the results of arithmetic expressions.
@@ -37,7 +38,7 @@ public class Evaluator extends Visitor {
      *
      * @param o The operation being visited
      */
-    public void visit(Operation o) {
+    public void visit(BinaryOperation o) {
         ArrayList<MyNumber> evaluatedArgs = new ArrayList<>();
         //first loop to recursively evaluate each subexpression
         for(Expression a:o.args) {
@@ -56,4 +57,12 @@ public class Evaluator extends Visitor {
 
     }
 
+    /** Use the visitor design pattern to visit an unary operation
+     *
+     * @param o The operation being visited
+     */
+    public void visit(UnaryOperation o) {
+        o.arg.accept(this);
+        computedValue = o.op(computedValue);
+    }
 }

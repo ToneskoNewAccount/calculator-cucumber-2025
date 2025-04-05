@@ -265,3 +265,14 @@ Feature: Double Arithmetic Expressions
           | 3/4 | 1.5 |          1.125 |
           | 5/2 | 2.5 |           6.25 |
           | 7/3 | 3.5 |  8.16666666667 |
+
+  Scenario Outline: Evaluating absolute value of a double number
+    Given an operation 'abs'
+    When I provide a double number <n>
+    Then the operation evaluates to a double <result>
+
+    Examples:
+      | n    | result |
+      |  5.4 |    5.4 |
+      | -5.4 |    5.4 |
+      |  0.0 |    0.0 |

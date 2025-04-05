@@ -12,7 +12,7 @@ import core.exception.IllegalConstruction;
 import core.number.MyInt;
 import core.operation.Divides;
 import core.operation.Minus;
-import core.operation.Operation;
+import core.operation.BinaryOperation;
 import core.operation.Plus;
 import core.operation.Times;
 import core.visitor.Counter.CounterMode;
@@ -24,7 +24,7 @@ import java.util.List;
 
 
 class TestCounting {
-    private Operation o;
+    private BinaryOperation o;
     private int value1, value2;
     private Expression e;
 

@@ -43,3 +43,10 @@ Feature: Testing notations of arithmetic expressions
       | -         | 5            | 6             | 7            | - (5, 6.0, 7.0) | (5, 6.0, 7.0) -  | ( 5 - 6.0 - 7.0 ) |
       | *         | 5            | 6             | 7            | * (5, 6.0, 7.0) | (5, 6.0, 7.0) *  | ( 5 * 6.0 * 7.0 ) |
       | /         | 5            | 6             | 7            | / (5, 6.0, 7.0) | (5, 6.0, 7.0) /  | ( 5 / 6.0 / 7.0 ) |
+
+  Scenario: Testing notations with unary operation
+    Given an operation 'abs'
+    When I provide an integer number 5
+    Then its PREFIX notation is abs (5)
+    And its POSTFIX notation is (5) abs
+    And its INFIX notation is abs ( 5 )

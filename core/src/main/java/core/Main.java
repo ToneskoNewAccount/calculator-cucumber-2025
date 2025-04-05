@@ -9,6 +9,7 @@ import core.number.MyComplexNumber;
 import core.number.MyDouble;
 import core.number.MyInt;
 import core.number.MyRationalNumber;
+import core.operation.AbsoluteValue;
 import core.operation.Divides;
 import core.operation.Minus;
 import core.operation.Plus;
@@ -46,31 +47,34 @@ public class Main {
 
             e = new MyInt(8);
             c.print(e);
-            c.eval(e);
 
             List<Expression> params = new ArrayList<>();
             Collections.addAll(params, new MyInt(3), new MyInt(4), new MyInt(5));
             e = new Plus(params);
             c.printExpressionDetails(e, Notation.PREFIX);
-            c.eval(e);
 
             List<Expression> params2 = new ArrayList<>();
             Collections.addAll(params2, new MyInt(5), new MyInt(3));
             e = new Minus(params2);
             c.print(e);
-            c.eval(e);
 
             List<Expression> params3 = new ArrayList<>();
             Collections.addAll(params3, new Plus(params), new Minus(params2));
             e = new Times(params3);
             c.printExpressionDetails(e);
-            c.eval(e);
 
             List<Expression> params4 = new ArrayList<>();
             Collections.addAll(params4, new Plus(params), new Minus(params2), new MyInt(5), MyRationalNumber.createRationalNumber(4, 5));
             e = new Divides(params4);
             c.print(e, Notation.POSTFIX);
-            c.eval(e);
+
+            List<Expression> params5 = List.of(new MyInt(0), e);
+            e = new Minus(params5);
+            c.print(e, Notation.POSTFIX);
+
+            e = new AbsoluteValue(e);
+            c.print(e, Notation.POSTFIX);
+
         } catch (IllegalConstruction exception) {
             System.out.println("cannot create operations without parameters");
         }

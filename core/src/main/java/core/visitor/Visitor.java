@@ -1,7 +1,8 @@
 package core.visitor;
 
+import core.operation.UnaryOperation;
 import core.number.MyNumber;
-import core.operation.Operation;
+import core.operation.BinaryOperation;
 
 /**
  * Visitor design pattern
@@ -20,5 +21,12 @@ public abstract class Visitor {
      *
      * @param o The operation being visited
      */
-    public abstract void visit(Operation o);
+    public abstract void visit(BinaryOperation o);
+
+    /**
+     * The Visitor can traverse an unary operation (a subtype of Expression)
+     *
+     * @param o The operation being visited
+     */
+    public abstract void visit(UnaryOperation o);
 }

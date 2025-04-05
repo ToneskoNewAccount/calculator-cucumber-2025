@@ -3,10 +3,7 @@ package core.steps;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import java.util.ArrayList;
-
 import core.number.MyRationalNumber;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RationalSteps {
 
@@ -17,8 +14,6 @@ public class RationalSteps {
 
     @Then("^the operation evaluates to a rational (-?\\d+)/(-?\\d+)")
     public void theResultShouldBe(int res_num, int res_den) {
-        MyRationalNumber res_rat = (MyRationalNumber) CommonSteps.c.eval(CommonSteps.op);
-        assertEquals(res_num, res_rat.getNumerator());
-        assertEquals( res_den, res_rat.getDenominator());
+        CommonSteps.operationEvaluation(MyRationalNumber.createRationalNumber(res_num, res_den));
     }
 }

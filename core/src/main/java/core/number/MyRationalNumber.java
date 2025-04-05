@@ -146,4 +146,11 @@ public class MyRationalNumber extends MyDouble {
     public int hashCode() {
         return numerator * 31 + denominator;
     }
+
+    @Override
+    public MyNumber abs() {
+        // We can do that since the simplified form of a rational number is unique.
+        // So if there is a negative sign, it is in the numerator.
+        return createRationalNumber(Math.abs(numerator), denominator);
+    }
 }

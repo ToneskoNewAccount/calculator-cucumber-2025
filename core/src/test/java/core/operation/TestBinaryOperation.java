@@ -10,7 +10,7 @@ import core.number.MyInt;
 import java.util.Arrays;
 import java.util.List;
 
-class TestOperation {
+class TestBinaryOperation {
 
     @Test
     void testEquals() throws Exception {
@@ -18,7 +18,7 @@ class TestOperation {
                 params2 = Arrays.asList(new MyInt(5), new MyInt(4)),
                 params3 = Arrays.asList(new Plus(params1), new Minus(params2), new MyInt(7));
 
-        Operation o = new Divides(params3),
+        BinaryOperation o = new Divides(params3),
                 o2 = new Divides(params3);
 
 

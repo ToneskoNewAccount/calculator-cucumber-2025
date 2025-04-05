@@ -8,7 +8,6 @@ import core.number.MyDouble;
 import core.number.MyInt;
 import core.number.MyNumber;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class ComplexSteps {
@@ -36,16 +35,14 @@ public class ComplexSteps {
     @Then("^the operation evaluates to a complex (-?\\d+.\\d+) ([+-]) (-?\\d+.\\d+)i$")
     public void theResultShouldBeAComplexWithDoubles(double res_real, String sign, double res_imag) {
         int imaginarySign = validateSign(sign);
-        MyNumber res = CommonSteps.c.eval(CommonSteps.op);
         MyNumber expected = MyComplexNumber.createComplexNumber(new MyDouble(res_real), new MyDouble(imaginarySign * res_imag));
-        assertEquals(expected, res);
+        CommonSteps.operationEvaluation(expected);
     }
 
     @Then("the operation evaluates to a complex {int} {word} {int}i")
     public void theResultShouldBeAComplexWithInts(int res_real, String sign, int res_imag) {
         int imaginarySign = validateSign(sign);
-        MyNumber res = CommonSteps.c.eval(CommonSteps.op);
         MyNumber expected = MyComplexNumber.createComplexNumber(new MyInt(res_real), new MyInt(imaginarySign * res_imag));
-        assertEquals(expected, res);
+        CommonSteps.operationEvaluation(expected);
     }
 }

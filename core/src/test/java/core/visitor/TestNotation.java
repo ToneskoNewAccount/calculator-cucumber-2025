@@ -12,9 +12,10 @@ import core.number.MyDouble;
 import core.number.MyInt;
 import core.operation.Divides;
 import core.operation.Minus;
-import core.operation.Operation;
+import core.operation.BinaryOperation;
 import core.operation.Plus;
 import core.operation.Times;
+import core.operation.AbsoluteValue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +25,7 @@ class TestNotation {
 
     /* This is an auxiliary method to avoid code duplication.
      */
-    void testNotation(String s, Operation o, Notation n) {
+    void testNotation(String s, BinaryOperation o, Notation n) {
         Printer p = new Printer(n);
         o.accept(p);
         assertEquals(s, p.getResult());
@@ -32,7 +33,7 @@ class TestNotation {
 
     /* This is an auxiliary method to avoid code duplication.
      */
-    void testNotations(String symbol, double value1, double value2, Operation op) {
+    void testNotations(String symbol, double value1, double value2, BinaryOperation op) {
         //prefix notation:
         testNotation(symbol + " (" + value1 + ", " + value2 + ")", op, Notation.PREFIX);
         //infix notation:
@@ -46,7 +47,7 @@ class TestNotation {
     void testOutput(String symbol) {
         double value1 = 8;
         double value2 = 6;
-        Operation op = null;
+        BinaryOperation op = null;
         //List<Expression> params = new ArrayList<>(Arrays.asList(new MyNumber(value1),new MyNumber(value2)));
         List<Expression> params = Arrays.asList(new MyDouble(value1), new MyDouble(value2));
         try {
@@ -67,7 +68,7 @@ class TestNotation {
 
     @Test
     void testComplexNotations() {
-        Operation o = null;
+        BinaryOperation o = null;
         try {
             List<Expression> params1 = Arrays.asList(new MyInt(3), new MyInt(4), new MyInt(5));
             List<Expression> params2 = Arrays.asList(new MyInt(5), new MyInt(4));
@@ -94,6 +95,41 @@ class TestNotation {
 
         // Same but with prefix notation
         s = "/ (+ (3, 4, 5), - (5, 4), 7)";
+        n = Notation.PREFIX;
+        p.setNotation(n);
+        o.accept(p);
+        assertEquals(s, p.getResult());
+    }
+
+    @Test
+    void testNotationsWithUnaryOperations() {
+        BinaryOperation o = null;
+        try {
+            List<Expression> params1 = Arrays.asList(new MyInt(3), new MyInt(4), new MyInt(5));
+            List<Expression> params2 = Arrays.asList(new MyInt(5), new MyInt(4));
+            List<Expression> params3 = Arrays.asList(new Plus(params1), new AbsoluteValue(new AbsoluteValue(new Minus(params2))), new MyInt(7));
+            o = new Divides(params3);
+        } catch (IllegalConstruction e) {
+            fail();
+        }
+
+        // Use printer to test the output of the complex expression
+        String s = "( ( 3 + 4 + 5 ) / abs ( abs ( 5 - 4 ) ) / 7 )";
+        Notation n = Notation.INFIX;
+
+        Printer p = new Printer(n);
+        o.accept(p);
+        assertEquals(s, p.getResult());
+
+        // Same but with postfix notation
+        s = "((3, 4, 5) +, (((5, 4) -) abs) abs, 7) /";
+        n = Notation.POSTFIX;
+        p.setNotation(n);
+        o.accept(p);
+        assertEquals(s, p.getResult());
+
+        // Same but with prefix notation
+        s = "/ (+ (3, 4, 5), abs (abs (- (5, 4))), 7)";
         n = Notation.PREFIX;
         p.setNotation(n);
         o.accept(p);

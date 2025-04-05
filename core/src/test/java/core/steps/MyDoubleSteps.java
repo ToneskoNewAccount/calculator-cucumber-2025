@@ -1,7 +1,5 @@
 package core.steps;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +23,11 @@ public class MyDoubleSteps {
 
     @Then("the operation evaluates to a double {double}")
     public void thenTheOperationEvaluatesTo(double val) {
-        MyDouble other = (MyDouble) CommonSteps.c.eval(CommonSteps.op);
-        assertEquals(val, other.getDoubleValue(), 1e-9);
+        CommonSteps.operationEvaluation(new MyDouble(val));
     }
 
     @Then("the operation evaluates to a double NaN")
     public void thenTheOperationEvaluatesToNan() {
-        MyDouble other = (MyDouble) CommonSteps.c.eval(CommonSteps.op);
-        assertEquals(Double.NaN, other.getDoubleValue());
+        CommonSteps.operationEvaluation(new MyDouble(Double.NaN));
     }
 }
