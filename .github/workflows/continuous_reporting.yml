@@ -50,10 +50,12 @@ jobs:
           [ -f target/site/pmd.html ] && cp target/site/pmd.html reports/pmd.html || echo "PMD report missing"
           tar -czf reports.tar.gz reports
 
-      - name: Get Release Tag
+      - name: Set release tag (if exists)
+        if: github.event.release != null
         run: echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-
+      
       - name: Upload report to release
+        if: github.event.release != null
         uses: softprops/action-gh-release@v1
         with:
           files: reports.tar.gz
