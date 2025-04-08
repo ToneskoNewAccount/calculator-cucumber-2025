@@ -1,12 +1,10 @@
 name: CodeQL security analysis for Java
 
 on:
-  push:
-    branches: [ main, dev ]
-  pull_request:
-    branches: [ main, dev ]
-  schedule:
-    - cron: '42 1 * * 2'
+  workflow_run:
+    workflows: ["Java CI with Maven"]
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -45,6 +43,7 @@ jobs:
       uses: github/codeql-action/analyze@6bb031afdd8eb862ea3fc1848194185e076637e5 # v3.28.11
       with:
         category: "/language:java-kotlin"
+
         
 
 
