@@ -5,9 +5,6 @@ on:
     workflows: ["Java CI with Maven"]
     types:
       - completed
-  release:
-    types:
-      - published
 
 permissions:
   contents: write # Needed to upload assets to the release
@@ -48,15 +45,19 @@ jobs:
           # Compress everything
           zip -r reports.zip reports
 
-      - name: Set release tag (if exists)
-        if: github.event.release != null
-        run: echo "TAG_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+      - name: Get latest release info
+        id: get_release
+        uses: joutvhu/get-release-action@v1
+        with:
+          latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload report to release
-        if: github.event.release != null
+      - name: Upload report to latest release (if exists)
+        if: steps.get_release.outputs.id != ''
         uses: softprops/action-gh-release@v1
         with:
           files: reports.zip
-          tag_name: ${{ env.TAG_NAME }}
+          tag_name: ${{ steps.get_release.outputs.tag_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
