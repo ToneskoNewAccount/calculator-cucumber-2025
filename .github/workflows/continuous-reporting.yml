@@ -32,9 +32,13 @@ jobs:
           mkdir -p reports
           mkdir -p reports/javadoc
           mkdir -p reports/jacoco
+          mkdir -p reports/cucumber
 
           # JavaDoc
           cp -r target/reports/apidocs/* reports/javadoc
+
+          # Cucumber tests
+          cp -r target/reports/surefire/* reports/cucumber
 
           # JaCoCo Coverage
           cp -r target/site/jacoco/* reports/jacoco
