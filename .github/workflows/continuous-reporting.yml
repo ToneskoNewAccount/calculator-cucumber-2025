@@ -24,7 +24,7 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Generate Reports (JavaDoc, Coverage, PMD)
+      - name: Generate Reports(JavaDoc, Coverage, PMD)
         run: mvn verify
 
       - name: Archive reports
