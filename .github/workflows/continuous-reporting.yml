@@ -47,11 +47,20 @@ jobs:
 
       - name: Get latest release info
         id: get_release
-        uses: joutvhu/get-release-action@v1
+        uses: actions/github-script@v7
         with:
-          latest: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const releases = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+
+            if (releases.data.length > 0) {
+              const latest = releases.data[0];
+              core.setOutput("tag_name", latest.tag_name);
+            } else {
+              core.setOutput("tag_name", "");
+            }
 
       - name: Upload report to latest release (if exists)
         if: steps.get_release.outputs.id != ''
