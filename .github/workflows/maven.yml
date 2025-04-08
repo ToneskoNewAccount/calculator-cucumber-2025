@@ -22,63 +22,64 @@ jobs:
       contents: write
 
     steps:
-    - id: checkout
-      name: checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@v4.2.2
       
-    - id: setupjava
-      name: Set up with Java 23
-      uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
-      with:
-        distribution: 'temurin'
-        java-version: 23
-        cache: 'maven'
+      - id: setupjava
+        name: Set up Java 23
+        uses: actions/setup-java@v4.7.0
+        with:
+          distribution: 'temurin'
+          java-version: 23
+          cache: 'maven'
         
-    - id: mvn
-      name: Build with Maven (including running all tests)
-      run: mvn -B package --file pom.xml
+      - id: mvn
+        name: Build with Maven (including running all tests)
+        run: mvn -B package --file pom.xml
       
-    - id: testreport
-      name: Publish Test Report
-      if: ${{ always() }}
-      uses: scacap/action-surefire-report@1a128e49c0585bc0b8e38e541ac3b6e35a5bc727 # v1.9.0
+      - id: testreport
+        name: Publish Test Report
+        if: ${{ always() }}
+        uses: scacap/action-surefire-report@v1.9.0
       
-    - name: Generate JaCoCo Badge
-      id: jacoco
-      uses: cicirello/jacoco-badge-generator@f33476a5a3fd5a4f77cb5eef2ebe728c1dd5b921 # v2.11.0
-      with:
-        generate-coverage-badge: true
-        generate-branches-badge: true
-        generate-summary: true
+      - name: Generate JaCoCo Badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2.11.0
+        with:
+          generate-coverage-badge: true
+          generate-branches-badge: true
+          generate-summary: true
         
-    - name: Log coverage percentage
-      run: |
-        echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
-        echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
+      - name: Log coverage percentage
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
         
-   - name: Commit and push the svg badges and the json coverage summary (if it changed)
-     uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
-     with:
-       default_author: github_actions
-       message: 'commit coverage badge and summary'
-       add: '*.svg *.json'
-       
-   - name: Upload JaCoCo coverage report
-     uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
-     with:
-       name: jacoco-report
-       path: target/site/jacoco/
-       
-   - name: Comment on PR with coverage percentages
-     if: ${{ github.event_name == 'pull_request' }}
-     run: |
-       REPORT=$(<.github/badges/coverage-summary.json)
-       COVERAGE=$(jq -r '.coverage' <<< "$REPORT")%
-       BRANCHES=$(jq -r '.branches' <<< "$REPORT")%
-       NEWLINE=$'\n'
-       BODY="## Test Coverage Summary ${NEWLINE}* __Coverage:__ ${COVERAGE}${NEWLINE}* __Branches:__ ${BRANCHES}"
-       gh pr comment ${{github.event.pull_request.number}} -b "${BODY}"
-     continue-on-error: true
-     env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+      - name: Commit and push the SVG badges and the JSON coverage summary (if it changed)
+        uses: EndBug/add-and-commit@v9.1.4
+        with:
+          default_author: github_actions
+          message: 'commit coverage badge and summary'
+          add: '*.svg *.json'
+         
+      - name: Upload JaCoCo coverage report
+        uses: actions/upload-artifact@v4.4.0
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+         
+      - name: Comment on PR with coverage percentages
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          REPORT=$(<.github/badges/coverage-summary.json)
+          COVERAGE=$(jq -r '.coverage' <<< "$REPORT")%
+          BRANCHES=$(jq -r '.branches' <<< "$REPORT")%
+          NEWLINE=$'\n'
+          BODY="## Test Coverage Summary ${NEWLINE}* __Coverage:__ ${COVERAGE}${NEWLINE}* __Branches:__ ${BRANCHES}"
+          gh pr comment ${{ github.event.pull_request.number }} -b "${BODY}"
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      
