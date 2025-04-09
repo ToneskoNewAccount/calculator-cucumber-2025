@@ -38,13 +38,13 @@ jobs:
           cp -r target/reports/apidocs/* reports/javadoc
 
           # Cucumber tests
-          cp -r core/target/reports/surefire/* reports/cucumber
+          cp -r target/surefire-reports/* reports/surefire-reports
 
           # JaCoCo Coverage
           cp -r target/site/jacoco/* reports/jacoco
 
           # PMD Report
-          cp target/pmd.xml reports/pmd.xml
+          cp target/reports/pmd.html reports/pmd.html
 
           # Compress everything
           zip -r reports.zip reports
