@@ -5,6 +5,9 @@ on:
     workflows: ["Java CI with Maven"]
     types:
       - completed
+  release:
+    types:
+      - published    
 
 permissions:
   contents: write # Needed to upload assets to the release
