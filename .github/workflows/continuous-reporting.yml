@@ -32,7 +32,7 @@ jobs:
           mkdir -p reports
           mkdir -p reports/javadoc
           mkdir -p reports/jacoco
-          mkdir -p reports/cucumber
+          mkdir -p reports/cucumber-tests
 
           # JavaDoc
           cp -r target/reports/apidocs/* reports/javadoc
