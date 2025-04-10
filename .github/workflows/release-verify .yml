@@ -1,0 +1,43 @@
+name: Release Control
+
+on:
+  push:
+    branches:
+      - 'release/**'    # trigger on branches like release/1.0.0
+  release:
+    types: [created]     # trigger when a GitHub Release is created
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # Adjust if needed
+
+      - name: Build and Test
+        run: mvn clean verify
+
+  release:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: success()  # Only run this job if the previous one passed
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Release Package
+        run: 
+        #   echo "Running your release logic here..."
+          mvn deploy -P release
