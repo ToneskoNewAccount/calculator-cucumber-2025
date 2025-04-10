@@ -13,7 +13,7 @@ Feature: Integer Arithmetic Expressions
 
     Examples:
       | n1 | n2 | result |
-      | 4  | 5  | 9      |
+      | 4  | 5  | 10     |
       | 5  | 3  | 8      |
 
   Scenario: Adding two integer numbers with negative numbers
