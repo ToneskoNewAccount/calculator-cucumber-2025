@@ -29,11 +29,11 @@ jobs:
       - name: Delete release if verify failed
         if: steps.verify.outcome == 'failure'
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # PAT required
+          GH_TOKEN: ${{ github.token }}
           TAG_NAME: ${{ github.event.release.tag_name }}
         run: |
           echo "Tests failed. Deleting release $TAG_NAME..."
-
+      
           gh release delete "$TAG_NAME" --yes
           git push origin --delete "$TAG_NAME"
 
