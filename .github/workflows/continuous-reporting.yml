@@ -33,7 +33,7 @@ jobs:
           mkdir -p reports/cucumber-tests
 
           # JavaDoc
-          cp -r target/reports/apidocs/* reports/javadoc
+          cp -r target/report/apidocs/* reports/javadoc
 
           # Cucumber tests
           cp -r target/surefire-report/* reports/surefire-reports
