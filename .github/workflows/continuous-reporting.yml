@@ -1,18 +1,16 @@
 name: continuous-reporting
 
 on:
-  workflow_run:
-    workflows: ["Release Control"]
-    types:
-      - completed   
+  release:
+    types: [published]
 
 permissions:
-  contents: write # Needed to upload assets to the release
+  contents: write  # Needed to upload or delete release assets and tags
 
 jobs:
-  generate-report:
-    name: Generate and Upload Report
+  verify-and-report:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -23,52 +21,45 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Generate Reports(JavaDoc, Coverage, PMD)
-        run: mvn verify
+      - name: Run mvn verify
+        id: verify
+        run: mvn clean verify
+        continue-on-error: true  # Capture test failure but continue workflow
+
+      - name: Delete release if verify failed
+        if: steps.verify.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # PAT required
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          echo "Tests failed. Deleting release $TAG_NAME..."
+
+          gh release delete "$TAG_NAME" --yes
+          git push origin --delete "$TAG_NAME"
 
       - name: Archive reports
+        if: steps.verify.outcome == 'success'
         run: |
-          mkdir -p reports
-          mkdir -p reports/javadoc
-          mkdir -p reports/jacoco
-          mkdir -p reports/cucumber-tests
+          mkdir -p reports/javadoc reports/jacoco reports/surefire-reports
 
-          # JavaDoc
-          cp -r target/report/apidocs/* reports/javadoc
+          cp -r target/report/apidocs/* reports/javadoc || true
+          cp -r target/surefire-report/* reports/surefire-reports || true
+          cp -r target/site/jacoco/* reports/jacoco || true
+          cp target/reports/pmd.html reports/pmd.html || true
 
-          # Cucumber tests
-          cp -r target/surefire-report/* reports/surefire-reports
-
-          # JaCoCo Coverage
-          cp -r target/site/jacoco/* reports/jacoco
-
-          # PMD Report
-          cp target/reports/pmd.html reports/pmd.html
-
-          # Compress everything
           zip -r reports.zip reports
 
-      - name: Get latest release info
-        id: get_release
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const releases = await github.rest.repos.listReleases({
-              owner: context.repo.owner,
-              repo: context.repo.repo
-            });
-
-            if (releases.data.length > 0) {
-              const latest = releases.data[0];
-              core.setOutput("tag_name", latest.tag_name);
-            } else {
-              core.setOutput("tag_name", "");
-            }
-
-      - name: Upload report to latest release (if exists)
+      - name: Upload reports to release
+        if: steps.verify.outcome == 'success'
         uses: softprops/action-gh-release@v1
         with:
           files: reports.zip
-          tag_name: ${{ steps.get_release.outputs.tag_name }}
+          tag_name: ${{ github.event.release.tag_name }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Fail workflow if tests failed
+        if: steps.verify.outcome == 'failure'
+        run: |
+          echo "❌ mvn verify failed. Workflow failed."
+          exit 1
