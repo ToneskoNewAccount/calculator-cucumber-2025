@@ -1,9 +1,10 @@
 name: continuous-reporting
 
 on:
-  release:
+  workflow_run:
+    workflows: ["Release Control"]
     types:
-      - published    
+      - completed   
 
 permissions:
   contents: write # Needed to upload assets to the release
