@@ -36,7 +36,7 @@ jobs:
           cp -r target/reports/apidocs/* reports/javadoc
 
           # Cucumber tests
-          cp -r target/surefire-reports/* reports/surefire-reports
+          cp -r target/surefire-report/* reports/surefire-reports
 
           # JaCoCo Coverage
           cp -r target/site/jacoco/* reports/jacoco
